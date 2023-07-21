@@ -1,0 +1,10 @@
+{
+  "name": "aqimebaby",
+  "version": "1.0.0",
+  "description": "custom AQI alerts",
+  "private": true,
+  "scripts": {
+    "start": "cd backend && npm install && node index.js",
+    "heroku-postbuild": "cd frontend && npm install && npm run build"
+  }
+}
