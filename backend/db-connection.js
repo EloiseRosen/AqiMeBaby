@@ -1,12 +1,11 @@
 const dotenv = require('dotenv');
-const path = require('path');
 const Pool = require("pg").Pool;
 
 // for connecting to local dev db, dotenv.config gets values from .env file
 // and populates process.env.DB_USER etc.
 // dotenv doesn't overwrite process.env. values that are already set, which 
 // is why this is still fine in prod.
-dotenv.config({path: path.resolve(__dirname, '../.env')});
+dotenv.config();
 
 
 const pool = new Pool({
