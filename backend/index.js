@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const pool = require('./db-connection.js');
 
 
 const PORT = process.env.PORT || 3001;
@@ -13,6 +14,17 @@ app.get('/api', (req, res) => {
     res.json({message: 'Hello from server!'});
 });
 
+
+
+
+app.get('/api/accounts', async (req, res) => {
+    try {
+        const allAccounts = await pool.query('SELECT * FROM account');
+        res.json(allAccounts.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 
 
