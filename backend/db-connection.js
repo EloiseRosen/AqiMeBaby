@@ -1,19 +1,13 @@
 const dotenv = require('dotenv');
-const Pool = require("pg").Pool;
+const { Pool } = require("pg");
 
-// for connecting to local dev db, dotenv.config gets values from .env file
-// and populates process.env.DB_USER etc.
-// dotenv doesn't overwrite process.env. values that are already set, which 
-// is why this is still fine in prod.
+
 dotenv.config();
-
+const isProd = (process.env.NODE_ENV === 'production');
 
 const pool = new Pool({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT
+  connectionString: process.env.DATABASE_URL,
+  ssl: isProd ? { rejectUnauthorized: false } : false, // require SSL db connection in prod but not dev
 });
 
 module.exports = pool;
