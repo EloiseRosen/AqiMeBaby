@@ -1,13 +1,175 @@
 :root {
-    --extra-light-gray: #d0d0d0;
-    --light-gray: #aaaaaa;
-    --med-gray: #858585;
-    --dark-gray: #444444;
+    --light-gray: #c9c9cb;
+    --med-gray: #808080;
+    --off-black: #212121;
     --light-blue: #ade7fe;
-    --dark-blue: #76d5ff;
+    --med-blue: #76d5ff;
+    --med-dark-blue: #52acfa;
+    --dark-blue: #1a77f2;
+    --coral: #fe7e79;
+    --pink:  #fe48a3;
 }
 
 * {
     margin: 0;
     padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.main {
+    flex: 1;
+    width: min(950px, calc(100vw - 25px));
+    margin: 0 auto;
+}
+
+a:hover {
+    color: var(--pink); 
+}
+
+
+/* header-related */
+header {
+    margin-top: 30px;
+    margin-bottom: 100px;
+}
+.title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px; /* space between title and subtitle */
+}
+.title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    color: var(--off-black);
+    font-size: 85px;
+    letter-spacing: -1px;
+    word-spacing: 4px;
+    margin: 0px 20px;
+}
+.title-cloud {
+    max-height: 100px;
+}
+.subtitle-container {
+    display: flex;
+    justify-content: center;
+}
+.subtitle {
+    color: var(--med-gray);
+    font-weight: 500;
+}
+.log-out-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+.log-out {
+    font-size: 20px;
+}
+#wiki-link {
+    color: var(--med-dark-blue);
+}
+#wiki-link:hover {
+    color: var(--pink); 
+}
+
+
+/* buttons */
+button {
+    color: white;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+button:not(.transparent-button):active {
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
+    transform: scale(0.99);
+}
+.transparent-button {
+    background-color: transparent;
+    outline: none;
+    color: var(--dark-blue);
+}
+.transparent-button:hover {
+    color: var(--pink);
+}
+
+
+/* login */
+.login-container {
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.login-container h2 {
+    align-self: flex-start;
+    margin-top: 15px;
+}
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+.login-container input {
+    font: inherit;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--light-gray);
+}
+.forgot-pw {
+    align-self: flex-start;
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    padding: 0;
+    margin-top: -5px;
+    color: var(--dark-blue);
+    text-decoration: none;
+}
+.login-button {
+    background-color: var(--dark-blue);
+    font-size: 15px;
+}
+.login-box-line {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--light-gray);
+}
+.create-account-button {
+    background-color: var(--coral);
+    font-size: 15px;
+}
+  
+
+/* footer */
+.footer-icon-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+.footer-icon {
+    font-size: 1.2rem;
+    margin: 1.4rem 1rem 2rem 1rem;
+    color: var(--med-gray);
+}
+.footer-icon:hover {
+    color: var(--pink);
 }
