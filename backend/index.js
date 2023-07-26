@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fetch = require('node-fetch');
 const pool = require('./db-connection.js');
 
 
@@ -14,7 +15,17 @@ app.get('/api', (req, res) => {
     res.json({message: 'Hello from server!'});
 });
 
-
+app.get('/test', async (req, res) => {
+    try {
+      const response = await fetch('https://www.boredapi.com/api/activity');
+      const json = await response.json();
+      res.json({message: `Today's Activity: ${json.activity}!`});
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({error: 'An error occurred'});
+    }
+});
+  
 
 
 app.get('/api/accounts', async (req, res) => {

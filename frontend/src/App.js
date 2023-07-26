@@ -21,6 +21,23 @@ function App() {
     fetchMsg();
   }, []); // Empty dependency array -> run once on component mount
 
+
+  useEffect(() => {
+    async function testExternalAPI() {
+      try {
+        const response = await fetch(`${API_URL}/test`);
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    testExternalAPI();
+  }, []);
+
+
+
+
   useEffect(() => {
     async function fetchAccounts() {
       try {
