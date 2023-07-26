@@ -3,6 +3,11 @@ const cors = require('cors');
 const path = require('path');
 const fetch = require('node-fetch');
 const pool = require('./db-connection.js');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+
 
 
 const PORT = process.env.PORT || 3001;
@@ -17,9 +22,9 @@ app.get('/api', (req, res) => {
 
 app.get('/test', async (req, res) => {
     try {
-      const response = await fetch('https://www.boredapi.com/api/activity');
+      const response = await fetch(`https://api.waqi.info/feed/here/?token=${process.env.EXTERNAL_API_TOKEN}`);
       const json = await response.json();
-      res.json({message: `Today's Activity: ${json.activity}!`});
+      res.json(json);
     } catch (err) {
       console.error(err);
       res.status(500).json({error: 'An error occurred'});
