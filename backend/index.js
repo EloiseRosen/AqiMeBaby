@@ -48,10 +48,10 @@ app.post('/api/login', async (req, res) => {
       if (isMatch) {
         res.json({status: 'success'});
       } else {
-        res.status(400).json({status: 'error', error: 'invalid pw'});
+        res.status(400).json({status: 'error', error: 'Invalid password'});
       }
     } else {
-      res.status(400).json({status: 'error', error: 'no account has this email'});
+      res.status(400).json({status: 'error', error: 'No account has this email'});
     }
   } catch (err) {
     console.error(err.message);
@@ -61,6 +61,9 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/accounts', async (req, res) => {
   try {
+    if (req.body.pw === '') {
+      return res.status(400).json({status: 'error', error: 'Password cannot be empty'});
+    }
     const rowsWithMatchingEmail = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
     if (rowsWithMatchingEmail.rows.length === 0) {
       const salt = await bcrypt.genSalt(10);
@@ -68,18 +71,12 @@ app.post('/api/accounts', async (req, res) => {
       await pool.query('INSERT INTO account (email, pw) VALUES ($1, $2)', [req.body.email, saltedHashedPw]);
       res.json({status: 'success'});
     } else {
-      res.status(400).json({status: 'error', error: 'an account with this email already exists'});
+      res.status(400).json({status: 'error', error: 'This email already has an account. Log in to continue.'});
     }
   } catch (err) {
     console.error(err.message);
     res.status(500).json({status: 'error', error: 'an error occurred'});
   }
-});
-
-
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
 app.listen(PORT, () => {

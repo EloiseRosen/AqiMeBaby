@@ -8,6 +8,7 @@ function Login(props) {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,11 +24,18 @@ function Login(props) {
       const data = await response.json();
       if (data.status === 'success') {
         console.log('Success:', data);
+        setErrorMsg('');
       } else {
         console.error('Error:', data.error);
+        if (data.error === 'No account has this email' || data.error === 'Invalid password') {
+          setErrorMsg('Invalid email or password');
+        } else {
+          setErrorMsg(data.error);
+        }
       }
     } catch (error) {
       console.error('Error:', error);
+      setErrorMsg(error);
     }
   }
 
@@ -49,6 +57,7 @@ function Login(props) {
           {isCreatingAccount ? 'Create Account' : 'Log In'}
         </button>
       </form>
+      {errorMsg !== '' && <p className="error-msg">{errorMsg}</p>}
 
       <hr className="login-box-line" />
 

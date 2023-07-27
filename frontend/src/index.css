@@ -157,6 +157,10 @@ button:not(.transparent-button):active {
     background-color: var(--coral);
     font-size: 15px;
 }
+
+.error-msg {
+    color: red;
+}
   
 
 /* footer */
