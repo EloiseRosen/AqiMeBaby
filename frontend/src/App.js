@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     async function testExternalAPI() {
       try {
-        const response = await fetch(`${API_URL}/test`);
+        const response = await fetch(`${API_URL}/api/external`);
         const data = await response.json();
         console.log(data);
       } catch (error) {

@@ -144,7 +144,7 @@ button:not(.transparent-button):active {
     color: var(--dark-blue);
     text-decoration: none;
 }
-.login-button {
+.login-or-create-account-primary {
     background-color: var(--dark-blue);
     font-size: 15px;
 }
@@ -153,7 +153,7 @@ button:not(.transparent-button):active {
     border: none;
     border-top: 1px solid var(--light-gray);
 }
-.create-account-button {
+.login-or-create-account-alt {
     background-color: var(--coral);
     font-size: 15px;
 }
