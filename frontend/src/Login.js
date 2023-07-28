@@ -21,16 +21,17 @@ function Login(props) {
         body: JSON.stringify({email, pw}),
       });
       console.log(response);
-      const data = await response.json();
-      if (data.status === 'success') {
-        console.log('Success:', data);
+      
+      if (response.status === 200) {
+        console.log('Success!');
         setErrorMsg('');
       } else {
-        console.error('Error:', data.error);
-        if (data.error === 'No account has this email' || data.error === 'Invalid password') {
+        const responseBody = await response.json();
+        console.error('Error. responseBody:', responseBody);
+        if (responseBody.error === 'No account has this email' || responseBody.error === 'Invalid password') {
           setErrorMsg('Invalid email or password');
         } else {
-          setErrorMsg(data.error);
+          setErrorMsg(responseBody.error);
         }
       }
     } catch (error) {

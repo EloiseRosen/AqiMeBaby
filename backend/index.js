@@ -46,16 +46,16 @@ app.post('/api/login', async (req, res) => {
     if (rowsWithMatchingEmail.rows.length > 0) {
       const isMatch = await bcrypt.compare(req.body.pw, rowsWithMatchingEmail.rows[0].pw);
       if (isMatch) {
-        res.json({status: 'success'});
+        res.send();
       } else {
-        res.status(400).json({status: 'error', error: 'Invalid password'});
+        res.status(400).json({error: 'Invalid password'});
       }
     } else {
-      res.status(400).json({status: 'error', error: 'No account has this email'});
+      res.status(400).json({error: 'No account has this email'});
     }
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({status: 'error', error: 'an error occurred'});
+    res.status(500).json({error: 'an error occurred'});
   }
 });
 
@@ -69,13 +69,13 @@ app.post('/api/accounts', async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const saltedHashedPw = await bcrypt.hash(req.body.pw, salt);
       await pool.query('INSERT INTO account (email, pw) VALUES ($1, $2)', [req.body.email, saltedHashedPw]);
-      res.json({status: 'success'});
+      res.send();
     } else {
-      res.status(400).json({status: 'error', error: 'This email already has an account. Log in to continue.'});
+      res.status(400).json({error: 'This email already has an account. Log in to continue.'});
     }
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({status: 'error', error: 'an error occurred'});
+    res.status(500).json({error: 'an error occurred'});
   }
 });
 
