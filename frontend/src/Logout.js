@@ -2,15 +2,9 @@ import React from 'react';
 
 
 function Logout(props) {
-  function handleLogout() {
-    console.log('In handleLogout');
-    localStorage.removeItem('token');
-    props.setIsLoggedIn(false);
-  }
-
   return  (
   <div className='log-out-container'>
-    <button className="transparent-button log-out" onClick={handleLogout}>
+    <button className="transparent-button log-out" onClick={props.onLogout}>
       Log Out
     </button>
   </div>

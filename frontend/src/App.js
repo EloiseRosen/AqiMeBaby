@@ -66,12 +66,13 @@ function App() {
   function handle401() {
     console.log('received 401');
     setIsLoggedIn(false);
+    localStorage.removeItem('token');
   }
 
   return (
     <>
       <div className="main">
-        {isLoggedIn && <Logout setIsLoggedIn={setIsLoggedIn} />}
+        {isLoggedIn && <Logout onLogout={() => {setIsLoggedIn(false); localStorage.removeItem('token');}} />}
         <Header isLoggedIn={isLoggedIn} />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
         {isLoggedIn && <Alerts handle401={handle401} />}
