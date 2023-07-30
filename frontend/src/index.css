@@ -68,18 +68,17 @@ header {
     color: var(--med-gray);
     font-weight: 500;
 }
-.log-out-container {
-    text-align: right;
-    margin-bottom: 20px;
-}
-.log-out {
-    font-size: 20px;
-}
 #wiki-link {
     color: var(--med-dark-blue);
 }
 #wiki-link:hover {
     color: var(--pink); 
+}
+.log-out-container {
+    text-align: right;
+}
+.log-out {
+    font-size: 20px;
 }
 
 

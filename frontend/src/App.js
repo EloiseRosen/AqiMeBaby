@@ -60,7 +60,7 @@ function App() {
     <>
       <div className="main">
         {isLoggedIn && <Logout setIsLoggedIn={setIsLoggedIn} />}
-        <Header />
+        <Header isLoggedIn={isLoggedIn} />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
         {isLoggedIn && <Alerts />}
       </div>

@@ -65,14 +65,14 @@ app.get('/api/alerts', checkJwt, async (req, res) => {
 
 /*
 app.get('/api/external', async (req, res) => {
-    try {
-      const response = await fetch(`https://api.waqi.info/feed/here/?token=${process.env.EXTERNAL_API_TOKEN}`);
-      const json = await response.json();
-      res.json(json);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({error: 'An error occurred'});
-    }
+  try {
+    const response = await fetch(`https://api.waqi.info/feed/here/?token=${process.env.EXTERNAL_API_TOKEN}`);
+    const json = await response.json();
+    res.json(json);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: 'An error occurred'});
+  }
 });
 */
 
@@ -125,5 +125,5 @@ app.post('/api/accounts', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server has started on port ${PORT}`);
+  console.log(`Server has started on port ${PORT}`);
 });
