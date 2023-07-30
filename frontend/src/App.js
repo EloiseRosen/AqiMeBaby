@@ -12,7 +12,7 @@ console.log(API_URL);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  //  when component mounts, check whether user is authenticated 
+  // check authentication and update isLoggedIn accordingly
   useEffect(() => {
     async function verifyJwt() {
       const token = localStorage.getItem('token');
@@ -39,7 +39,7 @@ function App() {
       }
     }
     verifyJwt();
-  }, []); // Empty dependency array -> run once on component mount
+  });
   
   /*
   useEffect(() => {
@@ -62,7 +62,7 @@ function App() {
         {isLoggedIn && <Logout setIsLoggedIn={setIsLoggedIn} />}
         <Header />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
-        {isLoggedIn && <Alerts setIsLoggedIn={setIsLoggedIn} />}
+        {isLoggedIn && <Alerts />}
       </div>
       <Footer />
     </>

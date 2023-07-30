@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const API_URL = process.env.REACT_APP_API_URL;
 console.log(API_URL);
 
-function Alerts(props) {
+function Alerts() {
   const [alerts, setAlerts] = useState([]);
 
   async function fetchAlerts() {
@@ -12,13 +12,6 @@ function Alerts(props) {
                                   {headers: {Authorization: localStorage.getItem('token')}}
       );
       console.log('the response from GET /api/alerts was', response);
-
-      // got back a 401 so we should be logged out (in which case this component doesn't render)
-      if (response.status === 401) {
-        console.log('got back a 401, should be logged out');
-        props.setIsLoggedIn(false);
-      }
-
       const responseBody = await response.json();
       console.log('the response body from the GET /api/alerts was', responseBody);
       if (responseBody.error) {
