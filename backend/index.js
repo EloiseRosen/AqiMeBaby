@@ -92,7 +92,7 @@ app.post('/api/login', async (req, res) => {
     // create and send back JWT
     const token = jwt.sign({id: rowsWithMatchingEmail.rows[0].id, email: req.body.email}, 
                             process.env.JWT_SECRET, 
-                            {expiresIn: '10m'}); // TODO make longer once done testing
+                            {expiresIn: '1m'}); // TODO make longer once done testing
     return res.json({token: token});
 
   } catch (err) {

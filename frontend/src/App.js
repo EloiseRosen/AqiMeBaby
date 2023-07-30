@@ -12,7 +12,7 @@ console.log(API_URL);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // check authentication and update isLoggedIn accordingly
+  //  when component mounts, check whether user is authenticated
   useEffect(() => {
     async function verifyJwt() {
       const token = localStorage.getItem('token');
@@ -39,7 +39,7 @@ function App() {
       }
     }
     verifyJwt();
-  });
+  }, []); // Empty dependency array -> run once on component mount
   
   /*
   useEffect(() => {
@@ -56,13 +56,25 @@ function App() {
   }, []);
   */
 
+  /*
+  When someone presses a button in an individual component that does something through a protected route,
+  sometimes the user isn't authorized for that action anymore (they had a valid JWT before, which is why the
+  button is displayed, but in the meantime the JWT expired or otherwise). If an attempt is made to go through
+  a protected route without a valid JWT, a 401 is sent back. In this case the  app's state should go back to 
+  isLoggedIn being false.
+  */
+  function handle401() {
+    console.log('received 401');
+    setIsLoggedIn(false);
+  }
+
   return (
     <>
       <div className="main">
         {isLoggedIn && <Logout setIsLoggedIn={setIsLoggedIn} />}
         <Header isLoggedIn={isLoggedIn} />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
-        {isLoggedIn && <Alerts />}
+        {isLoggedIn && <Alerts handle401={handle401} />}
       </div>
       <Footer />
     </>
