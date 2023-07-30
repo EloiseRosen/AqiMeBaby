@@ -32,11 +32,11 @@ function Login(props) {
         setErrorMsg('');
 
         // If we were logging in, get the JWT from the response body, and set it in local storage.
-        // Then update our state to so that loggedIn is true.
+        // Then update our state to so that isLoggedIn is true.
         if (!isCreatingAccount) {
           const responseBody = await response.json();
           localStorage.setItem('token', responseBody.token);
-          props.setLoggedIn(true); 
+          props.setIsLoggedIn(true); 
         }
         
       } else {

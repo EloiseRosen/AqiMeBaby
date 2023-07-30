@@ -16,7 +16,7 @@ function Alerts(props) {
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
         console.log('got back a 401, should be logged out');
-        props.setLoggedIn(false);
+        props.setIsLoggedIn(false);
       }
 
       const responseBody = await response.json();

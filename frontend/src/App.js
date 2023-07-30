@@ -10,7 +10,7 @@ console.log(API_URL);
 
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   //  when component mounts, check whether user is authenticated 
   useEffect(() => {
@@ -25,16 +25,16 @@ function App() {
           });
 
           if (response.status === 200) {
-            setLoggedIn(true);
+            setIsLoggedIn(true);
           } else {
             localStorage.removeItem('token');
-            setLoggedIn(false);
+            setIsLoggedIn(false);
           }
 
         } catch (error) {
           console.error('Error:', error);
           localStorage.removeItem('token');
-          setLoggedIn(false);
+          setIsLoggedIn(false);
         }
       }
     }
@@ -59,10 +59,10 @@ function App() {
   return (
     <>
       <div className="main">
-        {loggedIn && <Logout setLoggedIn={setLoggedIn} />}
+        {isLoggedIn && <Logout setIsLoggedIn={setIsLoggedIn} />}
         <Header />
-        {!loggedIn && <Login setLoggedIn={setLoggedIn} />}
-        {loggedIn && <Alerts setLoggedIn={setLoggedIn} />}
+        {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
+        {isLoggedIn && <Alerts setIsLoggedIn={setIsLoggedIn} />}
       </div>
       <Footer />
     </>

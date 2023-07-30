@@ -5,7 +5,7 @@ function Logout(props) {
   function handleLogout() {
     console.log('In handleLogout');
     localStorage.removeItem('token');
-    props.setLoggedIn(false);
+    props.setIsLoggedIn(false);
   }
 
   return  (
