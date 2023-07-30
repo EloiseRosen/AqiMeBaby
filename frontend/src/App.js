@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Logout from './Logout';
 import Header from './Header';
 import Login from './Login';
+import Account from './Account';
 import Alerts from './Alerts';
 import Footer from './Footer';
 
@@ -75,6 +76,7 @@ function App() {
         {isLoggedIn && <Logout onLogout={() => {setIsLoggedIn(false); localStorage.removeItem('token');}} />}
         <Header isLoggedIn={isLoggedIn} />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
+        {isLoggedIn && <Account handle401={handle401} />}
         {isLoggedIn && <Alerts handle401={handle401} />}
       </div>
       <Footer />

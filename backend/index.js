@@ -64,6 +64,17 @@ app.get('/api/alerts', checkJwt, async (req, res) => {
   }
 });
 
+// for retrieving user's email
+app.get('/api/email', checkJwt, async (req, res) => {
+  try {
+    const emailQuery = await pool.query('SELECT * FROM account WHERE id = $1', [req.jwtPayload.id]);
+    res.json({email: emailQuery.rows[0].email});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({error: 'an error occurred'});
+  }
+});
+
 /*
 app.get('/api/external', async (req, res) => {
   try {
@@ -94,7 +105,7 @@ app.post('/api/login', async (req, res) => {
     // create and send back JWT
     const token = jwt.sign({id: rowsWithMatchingEmail.rows[0].id}, 
                             process.env.JWT_SECRET, 
-                            {expiresIn: '1m'}); // TODO make longer once done testing
+                            {expiresIn: '1y'});
     return res.json({token: token});
 
   } catch (err) {
