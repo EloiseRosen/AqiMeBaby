@@ -9,7 +9,12 @@ function Login(props) {
   const [pw, setPw] = useState('');
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  
+
+  function handleAltButtonClick() {
+    setIsCreatingAccount(prev => !prev);
+    setErrorMsg('');
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     const url = isCreatingAccount ? `${API_URL}/api/accounts` : `${API_URL}/api/login`;
@@ -25,6 +30,15 @@ function Login(props) {
       if (response.status === 200) {
         console.log('Success!');
         setErrorMsg('');
+
+        // If we were logging in, get the JWT from the response body, and set it in local storage.
+        // Then update our state to so that loggedIn is true.
+        if (!isCreatingAccount) {
+          const responseBody = await response.json();
+          localStorage.setItem('token', responseBody.token);
+          props.setLoggedIn(true); 
+        }
+        
       } else {
         const responseBody = await response.json();
         console.error('Error. responseBody:', responseBody);
@@ -62,7 +76,7 @@ function Login(props) {
 
       <hr className="login-box-line" />
 
-      <button className="login-or-create-account-alt" onClick={() => setIsCreatingAccount(prev => !prev)}>
+      <button className="login-or-create-account-alt" onClick={handleAltButtonClick}>
         {isCreatingAccount ? 'Log In to Existing Account' : 'Create New Account'}
       </button>
 
