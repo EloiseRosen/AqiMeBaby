@@ -50,6 +50,7 @@ app.get('/api/jwt', checkJwt, (req, res) => {
   res.status(200).send();
 });
 
+// for retrieving user's alerts
 app.get('/api/alerts', checkJwt, async (req, res) => {
   try {
     const alertQuery = await pool.query('SELECT * FROM alert WHERE account_id = $1', [req.jwtPayload.id]);
@@ -77,6 +78,7 @@ app.get('/api/external', async (req, res) => {
 */
 
 
+// for logging in to an existing account
 app.post('/api/login', async (req, res) => {
   try {
     const rowsWithMatchingEmail = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
@@ -90,7 +92,7 @@ app.post('/api/login', async (req, res) => {
     }
     
     // create and send back JWT
-    const token = jwt.sign({id: rowsWithMatchingEmail.rows[0].id, email: req.body.email}, 
+    const token = jwt.sign({id: rowsWithMatchingEmail.rows[0].id}, 
                             process.env.JWT_SECRET, 
                             {expiresIn: '1m'}); // TODO make longer once done testing
     return res.json({token: token});
@@ -101,6 +103,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// for creating a new account
 app.post('/api/accounts', async (req, res) => {
   try {
     if (req.body.pw === '') {
