@@ -63,7 +63,7 @@ function Login(props) {
         <input type="password" placeholder="Password" value={pw} onChange={(e) => setPw(e.target.value)} />
 
         {!isCreatingAccount &&
-        <button className="transparent-button forgot-pw"> {/* add onClick={onForgotPwClick} */}
+        <button type="button" className="transparent-button forgot-pw"> {/* add onClick={handleForgotPwClick} */}
           Forgot password?
         </button>
         }
