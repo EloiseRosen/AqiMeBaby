@@ -8,6 +8,7 @@ function Alerts(props) {
   const [alerts, setAlerts] = useState([]);
   const [locationInput, setLocationInput] = useState('');
   const [aqiInput, setAqiInput] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   async function fetchAlerts() {
     try {
@@ -57,12 +58,14 @@ function Alerts(props) {
       const responseBody = await response.json();
       console.log('the response body from the POST /api/alerts was', responseBody);
       if (responseBody.error) {
-        console.error('An error occurred while creating alert:', responseBody.error);
+        setErrorMsg(responseBody.error);
+      } else {
+        setErrorMsg('');
       }
       fetchAlerts(); // need to get new alerts for display
 
     } catch (err) {
-      console.error('An error occurred while creating alert:', err);
+      setErrorMsg(err);
     }
   }
 
@@ -116,6 +119,7 @@ function Alerts(props) {
           </tr>
         </tbody>
       </table>
+      <p className="error-msg alert">{errorMsg}</p>
       {false &&
         <img src={aqiChart} className="aqi-chart" alt="US AQI chart"></img>
       }

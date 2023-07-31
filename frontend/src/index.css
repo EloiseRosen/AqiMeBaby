@@ -49,6 +49,14 @@ input {
     border-top: 1px solid var(--light-gray);
 }
 
+.error-msg {
+    color: red;
+}
+
+.error-msg.alert {
+    text-align: center;
+}
+
 
 /* header-related */
 .title-container {
@@ -172,9 +180,7 @@ button {
     color: var(--dark-blue);
     text-decoration: none;
 }
-.error-msg {
-    color: red;
-}
+
 
 
 /* overview page (with Account and Alerts views) */
@@ -207,7 +213,7 @@ button {
 /* Alerts section */
 .alerts-table {
     width: 77%;
-    margin: 30px auto;
+    margin: 30px auto 0 auto;
     border-collapse: collapse;
     font-size: 18px;
 }
