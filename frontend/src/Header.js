@@ -4,7 +4,7 @@ import cloudImage from './images/cloud.png';
 
 function Header(props) {
   const headerStyle = {
-    marginTop: !props.isLoggedIn ? '30px' : '-5px',
+    marginTop: !props.isLoggedIn ? '30px' : '20px',
     marginBottom: !props.isLoggedIn ? '100px' : '50px'
   };
 

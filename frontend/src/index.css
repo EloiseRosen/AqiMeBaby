@@ -1,6 +1,7 @@
 :root {
     --light-gray: #c9c9cb;
     --med-gray: #808080;
+    --dark-gray: #343434;
     --off-black: #212121;
     --light-blue: #ade7fe;
     --med-blue: #76d5ff;
@@ -28,7 +29,7 @@ html {
 
 .main {
     flex: 1;
-    width: min(950px, calc(100vw - 25px));
+    width: min(900px, calc(100vw - 25px));
     margin: 0 auto;
 }
 
@@ -36,11 +37,18 @@ a:hover {
     color: var(--pink); 
 }
 
+input {
+    font: inherit;
+    border-radius: 5px;
+    border: 1px solid var(--light-gray);
+}
+
 .horizontal-line {
     width: 100%;
     border: none;
     border-top: 1px solid var(--light-gray);
 }
+
 
 /* header-related */
 .title-container {
@@ -132,11 +140,8 @@ button {
     width: 100%;
   }
 .login-container input {
-    font: inherit;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--light-gray);
 }
 .forgot-pw {
     align-self: flex-start;
@@ -151,13 +156,102 @@ button {
 .error-msg {
     color: red;
 }
-  
+
+
+/* overview page (with Account and Alerts views) */
+.overview-heading {
+    font-size: 30px;
+    margin: 10px 30px;
+}
+.overview-text {
+    margin: 10px 30px;
+    font-size: 18px;
+    color: var(--dark-gray);
+}
+
+
+/* Account section */
+.account-container {
+    display: flex;
+    align-items: center; /* Vertically center items */
+    margin: 20px 0px 50px 20px;
+    font-size: 20px;
+}
+.account-item {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+button.account-item {
+    font-size: 15px;
+}
+
+
+/* Alerts section */
+.alerts-table {
+    width: 77%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    font-size: 18px;
+}
+.alerts-table th, .alerts-table td {
+    text-align: left;
+    padding: 10px;
+}
+.alerts-table thead tr { /* line under table heading */
+    border-bottom: 1px solid var(--med-gray);
+}
+/* adjust column widths (add up to 100%) */
+.alerts-table td:first-child, .alerts-table th:first-child { 
+    width: 65%;
+}
+.alerts-table td:nth-child(2), .alerts-table th:nth-child(2) {
+    width: 25%;
+}
+.alerts-table td:last-child, .alerts-table th:last-child {
+    width: 10%;
+}
+.table-button {
+    padding: 0;
+    font-size: 20px;
+}
+.fa-plus {
+    font-size: 27px;
+}
+.alerts-table th:last-child, .alerts-table td:last-child { /* Center the icons in their column */
+    text-align: center;
+}
+.alerts-table input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.alerts-table tr:nth-last-child(2) td:first-child { /* create gap */
+    padding-right: 25px;
+}
+/* get "Need help?" flush to input row */
+.help-row td {
+    padding-top: 0;
+}
+.alerts-table tr:nth-last-child(2) td { /* input fields */
+    padding: 10px 0 0 0;
+}
+
+
+/* Need help? related */
+.need-help {
+    padding: 0;
+}
+.aqi-chart {
+    max-height: 300px;
+}
+
 
 /* footer */
 .footer-icon-container {
     display: flex;
     justify-content: center;
-    margin-top: 60px;
+    margin-top: 20px;
+
 }
 .footer-icon {
     font-size: 1.2rem;
@@ -166,19 +260,4 @@ button {
 }
 .footer-icon:hover {
     color: var(--pink);
-}
-
-.account-page-heading {
-    font-size: 30px;
-    margin: 10px 20px;
-}
-.account-page-container {
-    display: flex;
-    align-items: center; /* Vertically center items */
-    margin: 20px 0px 100px 20px;
-    font-size: 20px;
-}
-.account-page-item {
-    margin-left: 15px;
-    margin-right: 15px;
 }

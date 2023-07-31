@@ -39,14 +39,14 @@ function Account(props) {
 
   return (
     <>
-      <h2 className="account-page-heading">Account</h2>
+      <h2 className="overview-heading">Account</h2>
       <hr className="horizontal-line" />
-      <div className="account-page-container">
-        <p className="account-page-item">{email}</p>
-        <button className="account-page-item blue-button">
+      <div className="account-container">
+        <p className="account-item">{email}</p>
+        <button className="account-item blue-button">
           Change Password
         </button>
-        <button className="account-page-item coral-button">
+        <button className="account-item coral-button">
           Delete Account
         </button>
       </div>
