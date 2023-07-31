@@ -7,6 +7,7 @@ console.log(API_URL);
 function Login(props) {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
+  const [isPwVisible, setIsPwVisible] = useState(false);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -57,7 +58,20 @@ function Login(props) {
 
       <form onSubmit={handleSubmit}>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={pw} onChange={(e) => setPw(e.target.value)} />
+
+        <div className="pw-div">
+          <input
+            type={isPwVisible ? 'text' : 'password'}
+            placeholder="Password"
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            className="pw-input"
+          />
+          <button type="button" className="transparent-button pw-eye" onClick={() => setIsPwVisible(prev => !prev)}>
+            <i className={isPwVisible ? 'fa-solid  fa-eye' : 'fa-solid fa-eye-slash'}></i>
+          </button>
+        </div>
+
 
         {!isCreatingAccount &&
         <button type="button" className="transparent-button forgot-pw"> {/* add onClick={handleForgotPwClick} */}

@@ -143,6 +143,25 @@ button {
     padding: 10px;
     margin-bottom: 10px;
 }
+.pw-div {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.pw-input {
+    flex-grow: 1;
+}
+.pw-eye {
+    color: var(--med-gray);
+    position: absolute;
+    right: 0;
+    border: none;
+    background: none;
+    margin-bottom: 10px; /* password-div goes down 10px lower than password input, so need this for icon to still be centered vertically */
+}
+.pw-eye:hover {
+    color: var(--med-gray);
+}
 .forgot-pw {
     align-self: flex-start;
     font-size: 13px;
