@@ -3,12 +3,25 @@ import cloudImage from './images/cloud.png';
 
 
 function Header(props) {
+  const headerStyle = {
+    marginTop: !props.isLoggedIn ? '30px' : '-5px',
+    marginBottom: !props.isLoggedIn ? '100px' : '50px'
+  };
+
+  const cloudStyle = {
+    maxHeight: !props.isLoggedIn ? '100px' : '80px'
+  };
+
+  const titleStyle = {
+    fontSize: !props.isLoggedIn ? '85px' : '65px'
+  };
+
   return (
-    <header>
+    <header style={headerStyle}>
       <div className="title-container">
-        <img src={cloudImage} className="title-cloud" alt="happy cloud"></img>
-        <h1 className="title">AQI ME BABY</h1>
-        <img src={cloudImage} className="title-cloud" alt="happy cloud"></img>
+        <img src={cloudImage} style={cloudStyle} alt="happy cloud"></img>
+        <h1 className="title" style={titleStyle}>AQI ME BABY</h1>
+        <img src={cloudImage} style={cloudStyle} alt="happy cloud"></img>
       </div>
       
       {!props.isLoggedIn &&

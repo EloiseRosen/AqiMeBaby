@@ -68,15 +68,15 @@ function Login(props) {
         </button>
         }
 
-        <button type="submit" className="login-or-create-account-primary">
+        <button type="submit" className="blue-button">
           {isCreatingAccount ? 'Create Account' : 'Log In'}
         </button>
       </form>
       {errorMsg !== '' && <p className="error-msg">{errorMsg}</p>}
 
-      <hr className="login-box-line" />
+      <hr className="horizontal-line" />
 
-      <button className="login-or-create-account-alt" onClick={handleAltButtonClick}>
+      <button className="coral-button" onClick={handleAltButtonClick}>
         {isCreatingAccount ? 'Log In to Existing Account' : 'Create New Account'}
       </button>
 

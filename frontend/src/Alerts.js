@@ -38,15 +38,16 @@ function Alerts(props) {
 
 
   return (
-    <div>
-      <h2>Alerts</h2>
+    <>
+      <h2 className="account-page-heading">Alerts</h2>
+      <hr className="horizontal-line" />
       {alerts.map((el, idx) => (
         <div key={idx}>
           <p>{el.location_name}</p>
           <p>{el.alert_level}</p>
         </div>
       ))}
-    </div>
+    </>
   );
 }
 

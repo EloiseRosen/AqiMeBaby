@@ -38,10 +38,19 @@ function Account(props) {
 
 
   return (
-    <div className="account-info-container">
-      <h2>Account</h2>
-      <p>{email}</p>
-    </div>
+    <>
+      <h2 className="account-page-heading">Account</h2>
+      <hr className="horizontal-line" />
+      <div className="account-page-container">
+        <p className="account-page-item">{email}</p>
+        <button className="account-page-item blue-button">
+          Change Password
+        </button>
+        <button className="account-page-item coral-button">
+          Delete Account
+        </button>
+      </div>
+    </>
   );
 }
 
