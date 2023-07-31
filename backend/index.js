@@ -64,6 +64,35 @@ app.get('/api/alerts', checkJwt, async (req, res) => {
   }
 });
 
+// create new alert
+app.post('/api/alerts', checkJwt, async (req, res) => {
+  try {
+    if (req.body.location === '' || req.body.aqi === '') {
+      return res.status(400).json({error: 'Fields cannot be empty'});
+    }
+    if (isNaN(Number(req.body.aqi))) {
+      return res.status(400).json({error: 'AQI must be a number'});
+    }
+    if (Number(req.body.aqi) < 1 || Number(req.body.aqi) > 500) {
+      return res.status(400).json({error: 'AQI must be between 1 and 500 (inclusive)'});
+    }
+
+    // TODO don't let user create an alert that already exists
+    //const matchingEmailQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
+    //if (matchingEmailQuery.rows.length > 0) {
+    //  return res.status(400).json({error: 'This email already has an account. Log in to continue.'});
+    //}
+
+    // TODO update lat and long when implemented
+    await pool.query('INSERT INTO alert (account_id, alert_level, location_name, latitude, longitude) VALUES ($1, $2, $3, $4, $5)', [req.jwtPayload.id, req.body.aqi, req.body.location, 37.7749, -122.4194]);
+    return res.json({message: 'alert successfully created'});
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({error: 'an error occurred while creating new alert'});
+  }
+});
+
 // for retrieving user's email
 app.get('/api/email', checkJwt, async (req, res) => {
   try {

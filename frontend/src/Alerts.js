@@ -39,6 +39,33 @@ function Alerts(props) {
     fetchAlerts();
   }, []);
 
+  async function handleCreateAlert() {
+    try {
+      const response = await fetch(`${API_URL}/api/alerts`, {
+          method: 'POST', 
+          headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
+          body: JSON.stringify({location: locationInput, aqi: aqiInput})
+        }
+      );
+      console.log('the response from POST /api/alerts was', response);
+
+      // got back a 401 so we should be logged out (in which case this component doesn't render)
+      if (response.status === 401) {
+        props.handle401();
+      }
+
+      const responseBody = await response.json();
+      console.log('the response body from the POST /api/alerts was', responseBody);
+      if (responseBody.error) {
+        console.error('An error occurred while creating alert:', responseBody.error);
+      }
+      fetchAlerts(); // need to get new alerts for display
+
+    } catch (err) {
+      console.error('An error occurred while creating alert:', err);
+    }
+  }
+
 
   return (
     <>
@@ -73,7 +100,7 @@ function Alerts(props) {
               <input type="text" placeholder="AQI Number" value={aqiInput} onChange={(e) => setAqiInput(e.target.value)} />
             </td>
             <td>
-              <button className="transparent-button table-button">
+              <button className="transparent-button table-button" onClick={handleCreateAlert}>
                 <i className="fa-solid fa-plus"></i>
               </button>
             </td>
