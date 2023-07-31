@@ -160,12 +160,13 @@ button {
 
 /* overview page (with Account and Alerts views) */
 .overview-heading {
-    font-size: 30px;
+    font-size: 28px;
+    font-weight: 500;
     margin: 10px 30px;
 }
 .overview-text {
     margin: 10px 30px;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--dark-gray);
 }
 
@@ -174,16 +175,14 @@ button {
 .account-container {
     display: flex;
     align-items: center; /* Vertically center items */
-    margin: 20px 0px 50px 20px;
-    font-size: 20px;
+    margin: 20px 0px 73px 20px;
+    font-size: 18px;
 }
 .account-item {
     margin-left: 12px;
     margin-right: 12px;
 }
-button.account-item {
-    font-size: 15px;
-}
+
 
 
 /* Alerts section */
@@ -212,10 +211,10 @@ button.account-item {
 }
 .table-button {
     padding: 0;
-    font-size: 20px;
+    font-size: 18px;
 }
 .fa-plus {
-    font-size: 27px;
+    font-size: 25px;
 }
 .alerts-table th:last-child, .alerts-table td:last-child { /* Center the icons in their column */
     text-align: center;
@@ -224,6 +223,9 @@ button.account-item {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+}
+.alerts-table input[type="text"]::placeholder {
+    font-size: 15px;
 }
 .alerts-table tr:nth-last-child(2) td:first-child { /* create gap */
     padding-right: 25px;
