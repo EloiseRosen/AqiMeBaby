@@ -17,7 +17,7 @@ function Login(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const url = isCreatingAccount ? `${API_URL}/api/accounts` : `${API_URL}/api/login`;
+    const url = isCreatingAccount ? `${API_URL}/api/account` : `${API_URL}/api/login`;
     console.log('In handleSubmit, url is', url);
     try {
       const response = await fetch(url, {
@@ -31,13 +31,10 @@ function Login(props) {
         console.log('Success!');
         setErrorMsg('');
 
-        // If we were logging in, get the JWT from the response body, and set it in local storage.
-        // Then update our state to so that isLoggedIn is true.
-        if (!isCreatingAccount) {
-          const responseBody = await response.json();
-          localStorage.setItem('token', responseBody.token);
-          props.setIsLoggedIn(true); 
-        }
+        // for create account and login paths, response body is our JWT ({token: token})
+        const responseBody = await response.json();
+        localStorage.setItem('token', responseBody.token);
+        props.setIsLoggedIn(true); 
         
       } else {
         const responseBody = await response.json();

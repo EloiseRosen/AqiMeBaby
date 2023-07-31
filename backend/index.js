@@ -92,18 +92,18 @@ app.get('/api/external', async (req, res) => {
 // for logging in to an existing account
 app.post('/api/login', async (req, res) => {
   try {
-    const rowsWithMatchingEmail = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
-    if (rowsWithMatchingEmail.rows.length === 0) {
+    const matchingEmailQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
+    if (matchingEmailQuery.rows.length === 0) {
       return res.status(400).json({error: 'No account has this email'});
     }
 
-    const isMatch = await bcrypt.compare(req.body.pw, rowsWithMatchingEmail.rows[0].pw);
+    const isMatch = await bcrypt.compare(req.body.pw, matchingEmailQuery.rows[0].pw);
     if (!isMatch) {
       return res.status(400).json({error: 'Invalid password'});
     }
     
     // create and send back JWT
-    const token = jwt.sign({id: rowsWithMatchingEmail.rows[0].id}, 
+    const token = jwt.sign({id: matchingEmailQuery.rows[0].id}, 
                             process.env.JWT_SECRET, 
                             {expiresIn: '1y'});
     return res.json({token: token});
@@ -115,7 +115,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // for creating a new account
-app.post('/api/accounts', async (req, res) => {
+app.post('/api/account', async (req, res) => {
   try {
     if (req.body.email === '') {
       return res.status(400).json({error: 'Email cannot be empty'});
@@ -129,8 +129,13 @@ app.post('/api/accounts', async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const saltedHashedPw = await bcrypt.hash(req.body.pw, salt);
-    await pool.query('INSERT INTO account (email, pw) VALUES ($1, $2)', [req.body.email, saltedHashedPw]);
-    res.send();
+    const idQuery = await pool.query('INSERT INTO account (email, pw) VALUES ($1, $2) RETURNING *', [req.body.email, saltedHashedPw]);
+
+    // want users to be signed in after they create account, so create and send back JWT
+    const token = jwt.sign({id: idQuery.rows[0].id}, 
+                            process.env.JWT_SECRET, 
+                            {expiresIn: '1y'});
+    return res.json({token: token});
 
   } catch (err) {
     console.error(err.message);
