@@ -71,6 +71,32 @@ function Alerts(props) {
     }
   }
 
+  async function handleDeleteAlert(id) {
+    try {
+      const response = await fetch(`${API_URL}/api/alerts/${id}`, {
+          method: 'DELETE', 
+          headers: {'Authorization': localStorage.getItem('token')}
+        }
+      );
+      console.log('the response from DELETE /api/alerts/:id was', response);
+
+      // got back a 401 so we should be logged out (in which case this component doesn't render)
+      if (response.status === 401) {
+        props.handle401();
+      }
+
+      const responseBody = await response.json();
+      console.log('the response body from the DELETE /api/alerts/:id was', responseBody);
+      if (responseBody.error) {
+        console.error(responseBody.error);
+      }
+      fetchAlerts(); // need to refresh displayed alerts
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   return (
     <>
@@ -91,7 +117,7 @@ function Alerts(props) {
               <td>{el.location_name}</td>
               <td>{el.alert_level}</td>
               <td>
-                <button className="transparent-button table-button">
+                <button className="transparent-button table-button" onClick={() => handleDeleteAlert(el.id)}>
                   <i className="fa-solid fa-trash-can"></i>
                 </button>
               </td>

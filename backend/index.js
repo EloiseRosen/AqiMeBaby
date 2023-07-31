@@ -93,6 +93,17 @@ app.post('/api/alerts', checkJwt, async (req, res) => {
   }
 });
 
+// delete alert
+app.delete('/api/alerts/:id', checkJwt, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM alert WHERE account_id = $1 and id = $2', [req.jwtPayload.id, req.params.id]);
+    return res.json({message: 'alert successfully deleted'});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({error: 'an error occurred while deleting alert'});
+  }
+});
+
 // for retrieving user's email
 app.get('/api/email', checkJwt, async (req, res) => {
   try {
