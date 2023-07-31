@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import aqiChart from './images/aqi-chart.png'; 
+import InfoBox from './InfoBox';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -139,18 +139,13 @@ function Alerts(props) {
           <tr className="help-row">
             <td></td>
             <td>
-              <button type="button" className="transparent-button need-help">
-                Need help?
-              </button>
+              <InfoBox />
             </td>
             <td></td>
           </tr>
         </tbody>
       </table>
       <p className="error-msg alert">{errorMsg}</p>
-      {false &&
-        <img src={aqiChart} className="aqi-chart" alt="US AQI chart"></img>
-      }
     </>
   );
 }
