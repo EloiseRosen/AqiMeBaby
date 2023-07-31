@@ -90,7 +90,7 @@ button {
     border: none;
     cursor: pointer;
 }
-button:not(.transparent-button):active {
+.press-down:active {
     box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
     transform: scale(0.99);
     font-size: 15px;
