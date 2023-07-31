@@ -61,6 +61,8 @@ function Alerts(props) {
         setErrorMsg(responseBody.error);
       } else {
         setErrorMsg('');
+        setAqiInput('');
+        setLocationInput('');
       }
       fetchAlerts(); // need to get new alerts for display
 
@@ -84,8 +86,8 @@ function Alerts(props) {
           </tr>
         </thead>
         <tbody>
-          {alerts.map((el, idx) => (
-            <tr key={idx}>
+          {alerts.map((el) => (
+            <tr key={el.id}>
               <td>{el.location_name}</td>
               <td>{el.alert_level}</td>
               <td>
