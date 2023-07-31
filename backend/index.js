@@ -117,11 +117,11 @@ app.post('/api/login', async (req, res) => {
 // for creating a new account
 app.post('/api/accounts', async (req, res) => {
   try {
-    if (req.body.pw === '') {
-      return res.status(400).json({error: 'Password cannot be empty'});
-    }
     if (req.body.email === '') {
       return res.status(400).json({error: 'Email cannot be empty'});
+    }
+    if (req.body.pw === '') {
+      return res.status(400).json({error: 'Password cannot be empty'});
     }
     const matchingEmailQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
     if (matchingEmailQuery.rows.length > 0) {
