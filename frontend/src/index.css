@@ -255,7 +255,7 @@ button {
 .alerts-table tr:nth-last-child(2) td:first-child { /* create gap */
     padding-right: 25px;
 }
-/* get "Need help?" flush to input row */
+/* get "Want help?" flush to input row */
 .help-row td {
     padding-top: 0;
 }
@@ -265,7 +265,7 @@ button {
 
 
 /* InfoBox related */
-.need-help {
+.want-help {
     padding: 0;
 }
 .info-box {

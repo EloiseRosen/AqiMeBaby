@@ -17,8 +17,8 @@ function InfoBox() {
         <p className="info-box-text">Note: This scale is for the US.  Different countries use different numbering systems; for other countries see <a href="https://en.wikipedia.org/wiki/Air_quality_index#Indices_by_location" target="_blank" rel="noreferrer">here</a>.</p>
       </div>
       }
-      <button className="transparent-button need-help" onClick={() => setInfoIsOpen(prev => !prev)}>
-        Need help?
+      <button className="transparent-button want-help" onClick={() => setInfoIsOpen(prev => !prev)}>
+        Want help?
       </button>
     </>
   );
