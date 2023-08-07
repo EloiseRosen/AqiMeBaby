@@ -42,7 +42,7 @@ function App() {
     verifyJwt();
   }, []); // Empty dependency array -> run once on component mount
   
-  /*
+
   useEffect(() => {
     async function testExternalAPI() {
       try {
@@ -55,7 +55,7 @@ function App() {
     }
     testExternalAPI();
   }, []);
-  */
+
 
   /*
   When someone presses a button in an individual component that does something through a protected route,
