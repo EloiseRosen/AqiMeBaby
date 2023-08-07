@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import InfoBox from './InfoBox';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -8,7 +8,40 @@ function Alerts(props) {
   const [alerts, setAlerts] = useState([]);
   const [locationInput, setLocationInput] = useState('');
   const [aqiInput, setAqiInput] = useState('');
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
+  // don't allow alert creation unless autocompleted place with lat and long has been selected
+  const [autocompletedPlaceSelected, setAutocompletedPlaceSelected] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const locationInputRef = useRef(null); // refers to location input field (see ref={locationInputRef} below)
+  // locationInputRef.current then points to the actual DOM element of the input field once it is rendered.
+  // This is then used in new window.google.maps.places.Autocomplete(locationInputRef.current) to initialize
+  // the Google Places API autocomplete feature.
+  // useRef avoids unnecessary re-renders of component
+  useEffect(() => {
+    window.initAutocomplete = () => {
+      const autocomplete = new window.google.maps.places.Autocomplete(locationInputRef.current);
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry && place.geometry.location) {
+          setLat(place.geometry.location.lat());
+          setLong(place.geometry.location.lng());
+          setLocationInput(place.formatted_address || place.name);
+          setAutocompletedPlaceSelected(true);
+          setErrorMsg('');
+        } else {
+          setAutocompletedPlaceSelected(false);
+          setErrorMsg('Invalid location: does not have populated latitude and longitude');
+        }
+      });
+    }
+    const script = document.createElement('script');
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDpjudUTMuqEypYNUkbT5GWIEVBQnV_u78&libraries=places&callback=initAutocomplete';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+  }, []);
 
   async function fetchAlerts() {
     try {
@@ -41,11 +74,15 @@ function Alerts(props) {
   }, []);
 
   async function handleCreateAlert() {
+    if (!autocompletedPlaceSelected) {
+      setErrorMsg('Please select a location from dropdown');
+      return;
+    }
     try {
       const response = await fetch(`${API_URL}/api/alerts`, {
           method: 'POST', 
           headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
-          body: JSON.stringify({location: locationInput, aqi: aqiInput})
+          body: JSON.stringify({location: locationInput, aqi: aqiInput, lat: lat, long: long})
         }
       );
       console.log('the response from POST /api/alerts was', response);
@@ -125,7 +162,16 @@ function Alerts(props) {
           ))}
           <tr>
             <td>
-              <input type="text" placeholder="Location" value={locationInput} onChange={(e) => setLocationInput(e.target.value)} />
+              <input
+                ref={locationInputRef}
+                type="text"
+                placeholder="Location"
+                value={locationInput}
+                onChange={(e) => {
+                  setLocationInput(e.target.value);
+                  setAutocompletedPlaceSelected(false);
+                }}
+              />
             </td>
             <td>
               <input type="text" placeholder="AQI Number" value={aqiInput} onChange={(e) => setAqiInput(e.target.value)} />

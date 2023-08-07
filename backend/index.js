@@ -83,8 +83,7 @@ app.post('/api/alerts', checkJwt, async (req, res) => {
     //  return res.status(400).json({error: 'This email already has an account. Log in to continue.'});
     //}
 
-    // TODO update lat and long when implemented
-    await pool.query('INSERT INTO alert (account_id, alert_level, location_name, latitude, longitude) VALUES ($1, $2, $3, $4, $5)', [req.jwtPayload.id, req.body.aqi, req.body.location, 37.7749, -122.4194]);
+    await pool.query('INSERT INTO alert (account_id, alert_level, location_name, latitude, longitude) VALUES ($1, $2, $3, $4, $5)', [req.jwtPayload.id, req.body.aqi, req.body.location, req.body.lat, req.body.long]);
     return res.json({message: 'alert successfully created'});
 
   } catch (err) {
