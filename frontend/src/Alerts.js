@@ -12,10 +12,9 @@ function Alerts(props) {
 
   async function fetchAlerts() {
     try {
-      const response = await fetch(`${API_URL}/api/alerts`, {
-        // headers: {Authorization: localStorage.getItem('token')}, // no longer storing JWT in local storage
-        credentials: 'include', // makes cookies be included, which we need because our JWT is now stored in cookie
-      });
+      const response = await fetch(`${API_URL}/api/alerts`,
+                                  {headers: {Authorization: localStorage.getItem('token')}}
+      );
       console.log('the response from GET /api/alerts was', response);
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
@@ -45,9 +44,8 @@ function Alerts(props) {
     try {
       const response = await fetch(`${API_URL}/api/alerts`, {
           method: 'POST', 
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({location: locationInput, aqi: aqiInput}),
-          credentials: 'include'
+          headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
+          body: JSON.stringify({location: locationInput, aqi: aqiInput})
         }
       );
       console.log('the response from POST /api/alerts was', response);
@@ -77,8 +75,7 @@ function Alerts(props) {
     try {
       const response = await fetch(`${API_URL}/api/alerts/${id}`, {
           method: 'DELETE', 
-          // headers: {'Authorization': localStorage.getItem('token')},
-          credentials: 'include'
+          headers: {'Authorization': localStorage.getItem('token')}
         }
       );
       console.log('the response from DELETE /api/alerts/:id was', response);
