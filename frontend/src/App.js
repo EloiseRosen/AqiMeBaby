@@ -16,28 +16,30 @@ function App() {
   //  when component mounts, check whether user is authenticated
   useEffect(() => {
     async function verifyJwt() {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          // check if their token is still valid
-          const response = await fetch(`${API_URL}/api/jwt`, {
-            method: 'GET',
-            headers: {'Authorization': token},
-          });
+      // const token = localStorage.getItem('token'); // now using httpOnly cookie instead of local storage
 
-          if (response.status === 200) {
-            setIsLoggedIn(true);
-          } else {
-            localStorage.removeItem('token');
-            setIsLoggedIn(false);
-          }
+      try {
+        // check if their token is still valid
+        const response = await fetch(`${API_URL}/api/jwt`, {
+          method: 'GET',
+          // headers: {'Authorization': token},
+          credentials: 'include', // makes cookies be included, which we need because our JWT is now stored in cookie
+          
+        });
 
-        } catch (error) {
-          console.error('Error:', error);
-          localStorage.removeItem('token');
+        if (response.status === 200) {
+          setIsLoggedIn(true);
+        } else {
+          // localStorage.removeItem('token');
           setIsLoggedIn(false);
         }
+
+      } catch (error) {
+        console.error('Error:', error);
+        // localStorage.removeItem('token');
+        setIsLoggedIn(false);
       }
+
     }
     verifyJwt();
   }, []); // Empty dependency array -> run once on component mount
@@ -67,13 +69,30 @@ function App() {
   function handle401() {
     console.log('received 401');
     setIsLoggedIn(false);
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
+  }
+
+  async function handleLogout() {
+    try {
+      const response = await fetch(`${API_URL}/api/logout`, { // clears our JWT cookie
+        method: 'POST',
+        credentials: 'include'
+      });
+  
+      if (response.ok) {
+        setIsLoggedIn(false);
+      } else {
+        console.error('logout error');
+      }
+    } catch (error) {
+      console.error('logout error:', error);
+    }
   }
 
   return (
     <>
       <div className="main">
-        {isLoggedIn && <Logout onLogout={() => {setIsLoggedIn(false); localStorage.removeItem('token');}} />}
+        {isLoggedIn && <Logout onLogout={handleLogout} />}
         <Header isLoggedIn={isLoggedIn} />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
         {isLoggedIn && <Account handle401={handle401} />}

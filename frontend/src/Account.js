@@ -8,9 +8,10 @@ function Account(props) {
 
   async function fetchEmail() {
     try {
-      const response = await fetch(`${API_URL}/api/email`,
-                                  {headers: {Authorization: localStorage.getItem('token')}}
-      );
+      const response = await fetch(`${API_URL}/api/email`, {
+        // headers: {Authorization: localStorage.getItem('token')} // no longer using local storange
+        credentials: 'include', // makes cookies be included, which we need because our JWT is now stored in cookie
+      });
       console.log('the response from GET /api/email was', response);
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)

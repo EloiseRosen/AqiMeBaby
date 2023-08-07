@@ -25,6 +25,7 @@ function Login(props) {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, pw}),
+        credentials: 'include', // makes cookies be included, which we need because our JWT is now stored in cookie
       });
       console.log(response);
       
@@ -32,9 +33,9 @@ function Login(props) {
         console.log('Success!');
         setErrorMsg('');
 
-        // for create account and login paths, response body is our JWT ({token: token})
-        const responseBody = await response.json();
-        localStorage.setItem('token', responseBody.token);
+        // now using HttpOnly cookie rather than localStorage
+        // When the frontend receives any HTTP response with a cookie, it automatically gets set on the browser
+        // localStorage.setItem('token', responseBody.token);
         props.setIsLoggedIn(true); 
         
       } else {

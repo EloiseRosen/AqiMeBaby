@@ -6,33 +6,38 @@ const pool = require('./db-connection.js');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 dotenv.config();
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-app.use(cors());
+app.use(cors({origin: process.env.CLIENT_URL, credentials: true, optionsSuccessStatus: 200}));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend/build'))); // serve static files from frontend
 
 
 function checkJwt(req, res, next) {
   console.log('in checkJwt');
-  if (!req.headers || !req.headers.authorization) {
-    console.log('no token provided');
-    return res.status(401).json({error: 'No token provided'});
+
+	// Get the JWT from the cookies
+  const token = req.cookies.token;
+
+  if (!token) {
+    console.log('no token in cookies');
+    return res.status(401).json({error: 'no token in cookies'});
   }
 
   /*
-  * first arg is token we received that needs to be verified
-  * second arg is secret
-  * third arg is callback that is called once verification is done. If 
+  First arg is token we received that needs to be verified.
+  Third arg is callback that is called once verification is done. If 
   there were an error during verification (e.g. JWT was tampered with),
   that will be in the first arg of the callback. Otherwise, the decoded
   JWT payload is in the second arg (`decoded`). Add the decoded payload to
   the req object so that we can access it in later middleware.
   */
-  jwt.verify(req.headers.authorization, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.log('Failed to authenticate token');
       return res.status(401).json({error: 'Failed to authenticate token'});
@@ -146,12 +151,32 @@ app.post('/api/login', async (req, res) => {
     const token = jwt.sign({id: matchingEmailQuery.rows[0].id}, 
                             process.env.JWT_SECRET, 
                             {expiresIn: '1y'});
-    return res.json({token: token});
+    /*
+    Instead of storing the JWT in localStorage (which is vulnerable to Cross-Site Scripting attacks), better to store
+    the JWT in HttpOnly cookie. (Setting httpOnly: true on the cookie makes it inaccessible to JavaScript running in 
+    the browser.)
+    res.cookie(..) sets a cookie on our HTTP response. When the frontend receives any HTTP response with a cookie, it 
+    automatically gets set on the browser, so no need to do a cookie-equivalent of localStorage.setItem('token', jwt).
+    And the browser will automatically include cookies on any subsequent HTTP requests.
+    */
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // use https in production
+      // if there is no maxAge or Expires it's a session cookie (i.e. cookie will be deleted when browser is closed,
+      // so user gets logged out). I'm setting the maxAge to be the same as the JWT expiration.
+      maxAge: 60 * 60 * 24 * 365 * 1000
+    });
+    return res.json({message: 'authentication successful'});
 
   } catch (err) {
     console.error(err.message);
     res.status(500).json({error: 'an error occurred'});
   }
+});
+
+app.post('/api/logout', (req, res) => {
+  res.clearCookie('token');
+  res.send();
 });
 
 // for creating a new account
