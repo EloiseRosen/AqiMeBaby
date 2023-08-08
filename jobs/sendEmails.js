@@ -12,7 +12,7 @@ console.log('process.env.AQI_API_TOKEN', process.env.AQI_API_TOKEN);
 async function sendEmails() {
   try {
     console.log('inside try');
-    const alertQuery = await pool.query('SELECT alert.latitude, alert.longitude, alert.alert_level, alert.alert_active_last_check, account.email FROM alert inner join account on alert.account_id = account.id');
+    const alertQuery = await pool.query('SELECT alert.location_name, alert.latitude, alert.longitude, alert.alert_level, alert.alert_active_last_check, account.email FROM alert inner join account on alert.account_id = account.id');
     console.log('alertQuery.rows.length', alertQuery.rows.length);
     for (const alertRow of alertQuery.rows) {
       console.log('alertRow', alertRow);
