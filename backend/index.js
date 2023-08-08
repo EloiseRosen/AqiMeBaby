@@ -77,11 +77,11 @@ app.post('/api/alerts', checkJwt, async (req, res) => {
       return res.status(400).json({error: 'AQI must be between 1 and 500 (inclusive)'});
     }
 
-    // TODO don't let user create an alert that already exists
-    //const matchingEmailQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
-    //if (matchingEmailQuery.rows.length > 0) {
-    //  return res.status(400).json({error: 'This email already has an account. Log in to continue.'});
-    //}
+    // don't allow creation of duplicate alerts
+    const matchingAlertsQuery = await pool.query('SELECT * FROM alert WHERE account_id = $1 and location_name = $2 and alert_level = $3', [req.jwtPayload.id, req.body.location, req.body.aqi]);
+    if (matchingAlertsQuery.rows.length > 0) {
+      return res.status(400).json({error: 'An alert is already set for this location and AQI'});
+    }
 
     await pool.query('INSERT INTO alert (account_id, alert_level, location_name, latitude, longitude) VALUES ($1, $2, $3, $4, $5)', [req.jwtPayload.id, req.body.aqi, req.body.location, req.body.lat, req.body.long]);
     return res.json({message: 'alert successfully created'});
