@@ -28,7 +28,7 @@ async function sendEmails() {
             'text': `The AQI in ${alertRow.location_name} has crossed above your threshold of ${alertRow.alert_level}. It is now ${responseBody.data.aqi}. You will receive another email when it crosses back below.\n\nLove,\nAQI Me Baby\n\nIf you'd like to help cover the cost of these alerts, you can donate at https://www.buymeacoffee.com/eloiserosen.`,
             'html': `<p>The AQI in <strong>${alertRow.location_name}</strong> has crossed above your threshold of <strong>${alertRow.alert_level}</strong>. It is now <strong>${responseBody.data.aqi}</strong>. You will receive another email when it crosses back below.</p><p>Love,<br>AQI Me Baby</p>
             <img src="https://i.imgur.com/Inz6kz1.png" style="max-width:70px;" alt="happy cloud" />
-            <br><p style="color: gray;">If you'd like to help cover the cost of these alerts, you can donate <a href="https://www.buymeacoffee.com/eloiserosen style="color: gray;">here</a>.</p>
+            <br><p style="color: gray;">If you'd like to help cover the cost of these alerts, you can donate <a href="https://www.buymeacoffee.com/eloiserosen" style="color: gray;">here</a>.</p>
             `
           });
           console.log('email sent');
