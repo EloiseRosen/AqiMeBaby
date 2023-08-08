@@ -6,6 +6,10 @@ const pool = require('./db-connection.js');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 dotenv.config();
 const PORT = process.env.PORT || 3001;
@@ -186,10 +190,25 @@ app.post('/api/account', async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const saltedHashedPw = await bcrypt.hash(req.body.pw, salt);
-    const idQuery = await pool.query('INSERT INTO account (email, pw) VALUES ($1, $2) RETURNING *', [req.body.email, saltedHashedPw]);
+    const newRowQuery = await pool.query('INSERT INTO account (email, pw) VALUES ($1, $2) RETURNING *', [req.body.email, saltedHashedPw]);
+
+    // send email verification request
+    try {
+      await sgMail.send({
+        'to': newRowQuery.rows[0].email,
+        'from': 'aqimebaby@aqimebaby.com',
+        'subject': `Verify your AQI Me Baby email address`,
+        'text': `Click here to verify your email:\nhttps://www.aqimebaby.com/verifyEmail?token=${newRowQuery.rows[0].email_verification_token}\n\nLove,\nAQI Me Baby\n\nP.S. If you didn't just create an AQI Me Baby account you can ignore this.`,
+        'html': `<p>Click <a href="https://www.aqimebaby.com/verifyEmail?token=${newRowQuery.rows[0].email_verification_token}">here</a> to verify your email.</p><p>Love,<br>AQI Me Baby<br>P.S. If you didn't just create an AQI Me Baby account you can ignore this.</p>
+        <img src="https://i.imgur.com/Inz6kz1.png" style="max-width:70px;" alt="happy cloud" />
+        `
+      });
+    } catch (err) {
+      console.error('error sending verification email:', err);
+    }
 
     // want users to be signed in after they create account, so create and send back JWT
-    const token = jwt.sign({id: idQuery.rows[0].id}, 
+    const token = jwt.sign({id: newRowQuery.rows[0].id}, 
                             process.env.JWT_SECRET, 
                             {expiresIn: '1y'});
     return res.json({token: token});
