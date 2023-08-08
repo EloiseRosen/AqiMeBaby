@@ -62,7 +62,7 @@ app.get('/api/confirmEmail', async (req, res) => {
     return res.status(400).json({error: 'Invalid verification token'});
   } else {
     await pool.query('UPDATE account SET confirmed_email = true WHERE email_verification_token = $1', [req.query.token]);
-    res.json({message: 'Email successfully confirmed!'});
+    res.send('<p>Email successfully confirmed!</p>');
   }
 });
 
