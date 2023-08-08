@@ -52,7 +52,7 @@ function Alerts(props) {
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
-        props.handle401();
+        props.onUnauthorized();
       }
 
       const responseBody = await response.json();
@@ -89,7 +89,7 @@ function Alerts(props) {
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
-        props.handle401();
+        props.onUnauthorized();
       }
 
       const responseBody = await response.json();
@@ -119,7 +119,7 @@ function Alerts(props) {
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
-        props.handle401();
+        props.onUnauthorized();
       }
 
       const responseBody = await response.json();
@@ -133,7 +133,6 @@ function Alerts(props) {
       console.error(err);
     }
   }
-
 
   return (
     <>

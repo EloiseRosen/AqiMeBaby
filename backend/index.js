@@ -182,6 +182,17 @@ app.post('/api/account', async (req, res) => {
   }
 });
 
+// for deleting an account
+app.delete('/api/account', checkJwt, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM account WHERE id = $1', [req.jwtPayload.id]);
+    return res.json({message: 'account successfully deleted'});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({error: 'an error occurred while deleting account'});
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server has started on port ${PORT}`);
 });

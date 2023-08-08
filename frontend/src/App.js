@@ -13,6 +13,11 @@ console.log(API_URL);
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  function handleUnauthorized() { // received 401, logged out, or deleted account
+    setIsLoggedIn(false);
+    localStorage.removeItem('token');
+  }
+
   //  when component mounts, check whether user is authenticated
   useEffect(() => {
     async function verifyJwt() {
@@ -28,14 +33,12 @@ function App() {
           if (response.status === 200) {
             setIsLoggedIn(true);
           } else {
-            localStorage.removeItem('token');
-            setIsLoggedIn(false);
+            handleUnauthorized();
           }
 
         } catch (error) {
           console.error('Error:', error);
-          localStorage.removeItem('token');
-          setIsLoggedIn(false);
+          handleUnauthorized();
         }
       }
     }
@@ -57,27 +60,15 @@ function App() {
   }, []);
 
 
-  /*
-  When someone presses a button in an individual component that does something through a protected route,
-  sometimes the user isn't authorized for that action anymore (they had a valid JWT before, which is why the
-  button is displayed, but in the meantime the JWT expired or otherwise). If an attempt is made to go through
-  a protected route without a valid JWT, a 401 is sent back. In this case the  app's state should go back to 
-  isLoggedIn being false.
-  */
-  function handle401() {
-    console.log('received 401');
-    setIsLoggedIn(false);
-    localStorage.removeItem('token');
-  }
 
   return (
     <>
       <div className="main">
-        {isLoggedIn && <Logout onLogout={() => {setIsLoggedIn(false); localStorage.removeItem('token');}} />}
+        {isLoggedIn && <Logout onLogout={handleUnauthorized} />}
         <Header isLoggedIn={isLoggedIn} />
         {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
-        {isLoggedIn && <Account handle401={handle401} />}
-        {isLoggedIn && <Alerts handle401={handle401} />}
+        {isLoggedIn && <Account onUnauthorized={handleUnauthorized} />}
+        {isLoggedIn && <Alerts onUnauthorized={handleUnauthorized} />}
       </div>
       <Footer />
     </>
