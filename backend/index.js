@@ -57,12 +57,16 @@ function checkJwt(req, res, next) {
 
 // route to confirm email: check supplied token against database, if there's a match mark the email confirmed 
 app.get('/api/confirmEmail', async (req, res) => {
-  const query = await pool.query('SELECT * FROM account WHERE email_verification_token = $1', [req.query.token]);
-  if (!query.rows.length) {
-    res.send('<h2 style="margin:20px;">Invalid verification token</h2>');
-  } else {
-    await pool.query('UPDATE account SET confirmed_email = true WHERE email_verification_token = $1', [req.query.token]);
-    res.send('<h2 style="margin:20px;">Email confirmed!</h2>');
+  try {
+    const query = await pool.query('SELECT * FROM account WHERE email_verification_token = $1', [req.query.token]);
+    if (!query.rows.length) {
+      res.send('<h2 style="margin:20px;">Invalid verification token</h2>');
+    } else {
+      await pool.query('UPDATE account SET confirmed_email = true WHERE email_verification_token = $1', [req.query.token]);
+      res.send('<h2 style="margin:20px;">Email confirmed!</h2>');
+    }
+  } catch (err) {
+    console.log(err);
   }
 });
 
