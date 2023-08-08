@@ -56,6 +56,12 @@ input {
 .error-msg.alert {
     text-align: center;
 }
+.error-msg.account {
+    margin-top: 25px;
+    margin-left: 12px;
+    font-size: 18px;
+    font-weight: 500;
+}
 
 
 /* header-related */
@@ -198,9 +204,11 @@ button {
 
 /* Account section */
 .account-container {
+    margin: 20px 0px 73px 20px;
+}
+.account-inline-container {
     display: flex;
     align-items: center; /* Vertically center items */
-    margin: 20px 0px 73px 20px;
     font-size: 18px;
 }
 .account-item {

@@ -5,6 +5,7 @@ const URL = process.env.REACT_APP_URL;
 
 function Account(props) {
   const [email, setEmail] = useState('');
+  const [emailConfirmed, setEmailConfirmed] = useState(false);
 
   async function fetchEmail() {
     try {
@@ -25,6 +26,7 @@ function Account(props) {
         props.onUnauthorized(); // account deleted on one browser but other browser still has JWT
       } else {
         setEmail(responseBody.email);
+        setEmailConfirmed(responseBody.confirmed_email);
       }
 
     } catch (err) {
@@ -72,13 +74,16 @@ function Account(props) {
       <h2 className="overview-heading">Account</h2>
       <hr className="horizontal-line" />
       <div className="account-container">
-        <p className="account-item">{email}</p>
-        <button className="account-item blue-button">
-          Change Password
-        </button>
-        <button className="account-item coral-button" onClick={handleDeleteAccount}>
-          Delete Account
-        </button>
+        <div className="account-inline-container">
+          <p className="account-item">{email}</p>
+          <button className="account-item blue-button">
+            Change Password
+          </button>
+          <button className="account-item coral-button" onClick={handleDeleteAccount}>
+            Delete Account
+          </button>
+        </div>
+        {!emailConfirmed && <p className="error-msg account">email hasn't been confirmed so no alerts can be sent (refresh page to refresh status)</p>}
       </div>
     </>
   );

@@ -133,7 +133,7 @@ app.delete('/api/alerts/:id', checkJwt, async (req, res) => {
 app.get('/api/email', checkJwt, async (req, res) => {
   try {
     const emailQuery = await pool.query('SELECT * FROM account WHERE id = $1', [req.jwtPayload.id]);
-    res.json({email: emailQuery.rows[0].email});
+    res.json({email: emailQuery.rows[0].email, confirmed_email: emailQuery.rows[0].confirmed_email});
   } catch (err) {
     console.error(err.message);
     res.status(500).json({error: 'an error occurred'});
