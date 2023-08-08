@@ -5,6 +5,12 @@ const pool = require('../backend/db-connection.js');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
+// Sleep for 65 milliseconds between requests. Then max # of AQI requests in a second
+// is 15.4, and max # of requests in a minute is 923.
+function sleep() {
+  return new Promise(resolve => setTimeout(resolve, 65));
+}
+
 async function sendEmails() {
   try {
     console.log('inside try');
@@ -13,6 +19,7 @@ async function sendEmails() {
     for (const alertRow of alertQuery.rows) {
       console.log('alertRow', alertRow);
       const response = await fetch(`https://api.waqi.info/feed/geo:${alertRow.latitude};${alertRow.longitude}/?token=${process.env.AQI_API_TOKEN}`);
+      await sleep();
       const responseBody = await response.json();
       console.log('AQI API responseBody', responseBody)
 
