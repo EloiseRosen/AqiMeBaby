@@ -22,7 +22,7 @@ function Account(props) {
       console.log('the response body from the GET /api/email was', responseBody);
       if (responseBody.error) {
         console.error('Failed to fetch email:', responseBody.error);
-        setEmail('');
+        props.onUnauthorized(); // account deleted on one browser but other browser still has JWT
       } else {
         setEmail(responseBody.email);
       }
