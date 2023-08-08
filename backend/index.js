@@ -59,10 +59,10 @@ function checkJwt(req, res, next) {
 app.get('/api/confirmEmail', async (req, res) => {
   const query = await pool.query('SELECT * FROM account WHERE email_verification_token = $1', [req.query.token]);
   if (!query.rows.length) {
-    return res.status(400).json({error: 'Invalid verification token'});
+    res.send('<h2 style="margin:20px;">Invalid verification token</h2>');
   } else {
     await pool.query('UPDATE account SET confirmed_email = true WHERE email_verification_token = $1', [req.query.token]);
-    res.send('<h1 style="margin:20px;">Email confirmed!</h1>');
+    res.send('<h2 style="margin:20px;">Email confirmed!</h2>');
   }
 });
 
