@@ -6,8 +6,8 @@ import Account from './Account';
 import Alerts from './Alerts';
 import Footer from './Footer';
 
-const API_URL = process.env.REACT_APP_API_URL;
-console.log(API_URL);
+const URL = process.env.REACT_APP_URL;
+console.log(URL);
 
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
       if (token) {
         try {
           // check if their token is still valid
-          const response = await fetch(`${API_URL}/api/jwt`, {
+          const response = await fetch(`${URL}/api/jwt`, {
             method: 'GET',
             headers: {'Authorization': token},
           });
@@ -49,7 +49,7 @@ function App() {
   useEffect(() => {
     async function testExternalAPI() {
       try {
-        const response = await fetch(`${API_URL}/api/external`);
+        const response = await fetch(`${URL}/api/external`);
         const data = await response.json();
         console.log(data);
       } catch (error) {

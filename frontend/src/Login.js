@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const API_URL = process.env.REACT_APP_API_URL;
-console.log(API_URL);
+const URL = process.env.REACT_APP_URL;
 
 
 function Login(props) {
@@ -18,7 +17,7 @@ function Login(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const url = isCreatingAccount ? `${API_URL}/api/account` : `${API_URL}/api/login`;
+    const url = isCreatingAccount ? `${URL}/api/account` : `${URL}/api/login`;
     console.log('In handleSubmit, url is', url);
     try {
       const response = await fetch(url, {

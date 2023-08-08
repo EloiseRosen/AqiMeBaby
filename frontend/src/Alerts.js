@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import InfoBox from './InfoBox';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const URL = process.env.REACT_APP_URL;
 
 
 function Alerts(props) {
@@ -45,7 +45,7 @@ function Alerts(props) {
 
   async function fetchAlerts() {
     try {
-      const response = await fetch(`${API_URL}/api/alerts`,
+      const response = await fetch(`${URL}/api/alerts`,
                                   {headers: {Authorization: localStorage.getItem('token')}}
       );
       console.log('the response from GET /api/alerts was', response);
@@ -79,7 +79,7 @@ function Alerts(props) {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/api/alerts`, {
+      const response = await fetch(`${URL}/api/alerts`, {
           method: 'POST', 
           headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')},
           body: JSON.stringify({location: locationInput, aqi: aqiInput, lat: lat, long: long})
@@ -110,7 +110,7 @@ function Alerts(props) {
 
   async function handleDeleteAlert(id) {
     try {
-      const response = await fetch(`${API_URL}/api/alerts/${id}`, {
+      const response = await fetch(`${URL}/api/alerts/${id}`, {
           method: 'DELETE', 
           headers: {'Authorization': localStorage.getItem('token')}
         }

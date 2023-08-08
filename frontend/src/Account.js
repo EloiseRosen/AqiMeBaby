@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const URL = process.env.REACT_APP_URL;
 
 
 function Account(props) {
@@ -8,7 +8,7 @@ function Account(props) {
 
   async function fetchEmail() {
     try {
-      const response = await fetch(`${API_URL}/api/email`,
+      const response = await fetch(`${URL}/api/email`,
                                   {headers: {Authorization: localStorage.getItem('token')}}
       );
       console.log('the response from GET /api/email was', response);
@@ -43,7 +43,7 @@ function Account(props) {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/account`, {
+      const response = await fetch(`${URL}/api/account`, {
           method: 'DELETE', 
           headers: {'Authorization': localStorage.getItem('token')}
         }

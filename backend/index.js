@@ -124,7 +124,7 @@ app.get('/api/email', checkJwt, async (req, res) => {
 
 app.get('/api/external', async (req, res) => {
   try {
-    const response = await fetch(`https://api.waqi.info/feed/geo:43.6;-79.3/?token=${process.env.EXTERNAL_API_TOKEN}`);
+    const response = await fetch(`https://api.waqi.info/feed/geo:43.6;-79.3/?token=${process.env.AQI_API_TOKEN}`);
     const json = await response.json();
     res.json(json);
   } catch (err) {
