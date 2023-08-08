@@ -51,6 +51,17 @@ function checkJwt(req, res, next) {
   });
 };
 
+// route to confirm email: check supplied token against database, if there's a match mark the email confirmed 
+app.get('/api/confirmEmail', async (req, res) => {
+  const query = await pool.query('SELECT * FROM account WHERE email_verification_token = $1', [req.query.token]);
+  if (!query.rows.length) {
+    return res.status(400).json({error: 'Invalid verification token'});
+  } else {
+    await pool.query('UPDATE account SET confirmed_email = true WHERE email_verification_token = $1', [req.query.token]);
+    res.json({message: 'Email successfully confirmed!'});
+  }
+});
+
 // sometimes the frontend just needs to know if a JWT is valid
 app.get('/api/jwt', checkJwt, (req, res) => {
   // If we get to this point, the checkJwt middleware got to next() so the JWT was valid
