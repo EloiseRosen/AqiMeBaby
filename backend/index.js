@@ -198,10 +198,10 @@ app.post('/api/account', async (req, res) => {
         'to': newRowQuery.rows[0].email,
         'from': 'aqimebaby@aqimebaby.com',
         'subject': `Verify your AQI Me Baby email address`,
-        'text': `Visit here to verify your email:\nhttps://www.aqimebaby.com/api/confirmEmail?token=${newRowQuery.rows[0].email_verification_token}\n\nLove,\nAQI Me Baby\n\nP.S. If you didn't just create an AQI Me Baby account, you can ignore this.`,
+        'text': `Visit here to verify your email:\nhttps://www.aqimebaby.com/api/confirmEmail?token=${newRowQuery.rows[0].email_verification_token}\n\nLove,\nAQI Me Baby\n\nP.S. If you didn't just create an AQI Me Baby account, you can ignore this email.`,
         'html': `<p>Click <a href="https://www.aqimebaby.com/api/confirmEmail?token=${newRowQuery.rows[0].email_verification_token}">here</a> to verify your email.</p><p>Love,<br>AQI Me Baby</p>
         <img src="https://i.imgur.com/Inz6kz1.png" style="max-width:70px;" alt="happy cloud" />
-        <br><p>P.S. If you didn't just create an <strong>AQI Me Baby</strong> account, you can ignore this.</p>
+        <br><br><p>P.S. If you didn't just create an <strong>AQI Me Baby</strong> account, you can ignore this email.</p>
         `
       });
     } catch (err) {
