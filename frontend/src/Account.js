@@ -59,6 +59,8 @@ function Account(props) {
       console.log('the response from DELETE /api/account was', responseBody);
       if (responseBody.error) {
         console.error(responseBody.error);
+      } else {
+        props.onUnauthorized(); // account successfully deleted, so also remove JWT and set state to logged out
       }
     } catch (err) {
       console.error(err);
