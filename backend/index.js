@@ -11,6 +11,13 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+app.use((req, res, next) => { // in prod always use HTTPS
+  if (req.headers['x-forwarded-proto'] !== 'https' && process.env.NODE_ENV === "production") {
+    res.redirect(301, `https://${req.headers.host}${req.url}`);
+  } else {
+    next();
+  }
+});
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend/build'))); // serve static files from frontend
