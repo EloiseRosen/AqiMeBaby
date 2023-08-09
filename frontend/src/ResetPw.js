@@ -10,23 +10,29 @@ function ResetPw(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    console.log('in ResetPw handleSubmit');
+    console.log({newPw: pw, pwResetToken: props.pwResetToken});
     try {
+      console.log('in try');
       const response = await fetch(`${URL}/api/resetPassword`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({newPw: pw, pwResetToken: props.pwResetToken}),
       });
-      console.log(response);
+      console.log('response status', response.status)
+      console.log('response', response);
       
       if (response.status === 200) {
         console.log('Pw reset success');
         props.onPwResetSuccess();
       } else {
+        console.log('in else')
         const responseBody = await response.json();
         console.error('Error. responseBody:', responseBody);
         setErrorMsg(responseBody.error);
       }
     } catch (err) {
+      console.log('in catch')
       console.error('Error:', err);
       setErrorMsg(err);
     }

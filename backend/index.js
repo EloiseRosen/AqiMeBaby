@@ -86,6 +86,9 @@ app.post('/api/requestPasswordReset', async (req, res) => {
 
 // for resetting pw
 app.post('/api/resetPassword', async (req, res) => {
+  console.log('inside /api/resetPassword')
+  console.log('req.body.newPw', req.body.newPw)
+  console.log('req.body.pwResetToken', req.body.pwResetToken)
   try {
     if (req.body.newPw === '') {
       return res.status(400).json({error: 'Password cannot be empty'});
@@ -98,12 +101,16 @@ app.post('/api/resetPassword', async (req, res) => {
     if (!userQuery.rows.length) {
       return res.status(400).json({error: 'Invalid token, does not match any account'});
     }
+    console.log('after query, userQuery is', userQuery);
 
     const salt = await bcrypt.genSalt(10);
     const saltedHashedPw = await bcrypt.hash(req.body.newPw, salt);
+    console.log('after saltedHashedPw')
     await pool.query('UPDATE account SET password = $1, pw_reset_token = NULL WHERE id = $2', [saltedHashedPw, userQuery.rows[0].id]);
+    console.log('after putting new password in database')
     res.status(200).json({message: 'Password updated successfully.'});
   } catch (err) {
+    console.log('in catch')
     console.error(err);
     res.status(500).json({error: 'An error occurred while resetting the password.'});
   }
