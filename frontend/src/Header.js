@@ -19,9 +19,9 @@ function Header(props) {
   return (
     <header style={headerStyle}>
       <div className="title-container">
-        <img src={cloudImage} style={cloudStyle} alt="happy cloud"></img>
+        <img src={cloudImage} style={cloudStyle} className="cloud-image" alt="happy cloud"></img>
         <h1 className="title" style={titleStyle}>AQI ME BABY</h1>
-        <img src={cloudImage} style={cloudStyle} alt="happy cloud"></img>
+        <img src={cloudImage} style={cloudStyle} className="hide-on-small-screens cloud-image" alt="happy cloud"></img>
       </div>
       
       {!props.isLoggedIn &&

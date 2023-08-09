@@ -173,7 +173,7 @@ function Alerts(props) {
               />
             </td>
             <td>
-              <input type="text" placeholder="AQI Number" value={aqiInput} onChange={(e) => setAqiInput(e.target.value)} />
+              <input type="text" placeholder="AQI" value={aqiInput} onChange={(e) => setAqiInput(e.target.value)} />
             </td>
             <td>
               <button className="transparent-button table-button" onClick={handleCreateAlert}>
