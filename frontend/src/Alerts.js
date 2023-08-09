@@ -48,7 +48,6 @@ function Alerts(props) {
       const response = await fetch(`${URL}/api/alerts`,
                                   {headers: {Authorization: localStorage.getItem('token')}}
       );
-      console.log('the response from GET /api/alerts was', response);
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
@@ -56,7 +55,6 @@ function Alerts(props) {
       }
 
       const responseBody = await response.json();
-      console.log('the response body from the GET /api/alerts was', responseBody);
       if (responseBody.error) {
         console.error('Failed to fetch alerts:', responseBody.error);
         setAlerts([]);
@@ -85,15 +83,12 @@ function Alerts(props) {
           body: JSON.stringify({location: locationInput, aqi: aqiInput, lat: lat, long: long})
         }
       );
-      console.log('the response from POST /api/alerts was', response);
-
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
         props.onUnauthorized();
       }
 
       const responseBody = await response.json();
-      console.log('the response body from the POST /api/alerts was', responseBody);
       if (responseBody.error) {
         setErrorMsg(responseBody.error);
       } else {
@@ -115,7 +110,6 @@ function Alerts(props) {
           headers: {'Authorization': localStorage.getItem('token')}
         }
       );
-      console.log('the response from DELETE /api/alerts/:id was', response);
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
@@ -123,7 +117,6 @@ function Alerts(props) {
       }
 
       const responseBody = await response.json();
-      console.log('the response body from the DELETE /api/alerts/:id was', responseBody);
       if (responseBody.error) {
         console.error(responseBody.error);
       }

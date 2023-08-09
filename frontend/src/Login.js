@@ -18,17 +18,14 @@ function Login(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     const url = isCreatingAccount ? `${URL}/api/account` : `${URL}/api/login`;
-    console.log('In handleSubmit, url is', url);
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, pw}),
       });
-      console.log(response);
       
       if (response.status === 200) {
-        console.log('Success!');
         setErrorMsg('');
         props.setPwResetSuccessMsg('');
         props.setAccountPwResetMsg('');
@@ -40,7 +37,6 @@ function Login(props) {
         
       } else {
         const responseBody = await response.json();
-        console.error('Error. responseBody:', responseBody);
         if (responseBody.error === 'No account has this email' || responseBody.error === 'Invalid password') {
           setErrorMsg('Invalid email or password');
         } else {

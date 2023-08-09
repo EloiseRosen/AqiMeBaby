@@ -8,7 +8,6 @@ import ResetPw from './ResetPw';
 import Footer from './Footer';
 
 const URL = process.env.REACT_APP_URL;
-console.log(URL);
 
 
 function App() {

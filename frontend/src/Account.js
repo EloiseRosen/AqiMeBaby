@@ -12,7 +12,6 @@ function Account(props) {
       const response = await fetch(`${URL}/api/email`,
                                   {headers: {Authorization: localStorage.getItem('token')}}
       );
-      console.log('the response from GET /api/email was', response);
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
@@ -20,7 +19,6 @@ function Account(props) {
       }
 
       const responseBody = await response.json();
-      console.log('the response body from the GET /api/email was', responseBody);
       if (responseBody.error) {
         console.error('Failed to fetch email:', responseBody.error);
         props.onUnauthorized(); // account deleted on one browser but other browser still has JWT
@@ -50,7 +48,6 @@ function Account(props) {
           headers: {'Authorization': localStorage.getItem('token')}
         }
       );
-      console.log('the response from DELETE /api/account was', response);
 
       // got back a 401 so we should be logged out (in which case this component doesn't render)
       if (response.status === 401) {
@@ -58,7 +55,6 @@ function Account(props) {
       }
 
       const responseBody = await response.json();
-      console.log('the response from DELETE /api/account was', responseBody);
       if (responseBody.error) {
         console.error(responseBody.error);
       } else {

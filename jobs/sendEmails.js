@@ -13,15 +13,11 @@ function sleep() {
 
 async function sendEmails() {
   try {
-    console.log('inside try');
     const alertQuery = await pool.query('SELECT alert.id, alert.location_name, alert.latitude, alert.longitude, alert.alert_level, alert.alert_active_last_check, account.email FROM alert inner join account on alert.account_id = account.id where account.confirmed_email = true');
-    console.log('alertQuery.rows.length', alertQuery.rows.length);
     for (const alertRow of alertQuery.rows) {
-      console.log('alertRow', alertRow);
       const response = await fetch(`https://api.waqi.info/feed/geo:${alertRow.latitude};${alertRow.longitude}/?token=${process.env.AQI_API_TOKEN}`);
       await sleep();
       const responseBody = await response.json();
-      console.log('AQI API responseBody', responseBody)
 
       // newly crossed above alert threshold
       if (responseBody.status === "ok" && responseBody.data.aqi > alertRow.alert_level && !alertRow.alert_active_last_check) {

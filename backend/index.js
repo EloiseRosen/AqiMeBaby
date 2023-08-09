@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const fetch = require('node-fetch');
+//const fetch = require('node-fetch');
 const pool = require('./db-connection.js');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
@@ -10,8 +10,6 @@ const sgMail = require('@sendgrid/mail');
 const { v4: uuidv4 } = require('uuid');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-
 dotenv.config();
 const PORT = process.env.PORT || 3001;
 
@@ -29,9 +27,7 @@ app.use(express.static(path.join(__dirname, '../frontend/build'))); // serve sta
 
 
 function checkJwt(req, res, next) {
-  console.log('in checkJwt');
   if (!req.headers || !req.headers.authorization) {
-    console.log('no token provided');
     return res.status(401).json({error: 'No token provided'});
   }
 
@@ -46,11 +42,9 @@ function checkJwt(req, res, next) {
   */
   jwt.verify(req.headers.authorization, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      console.log('Failed to authenticate token');
       return res.status(401).json({error: 'Failed to authenticate token'});
     } else {
       req.jwtPayload = decoded;
-      console.log('req.jwtPayload is', req.jwtPayload);
       next();
     }
   });
@@ -61,7 +55,6 @@ app.post('/api/requestPasswordReset', async (req, res) => {
   try {
     const userQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
     if (!userQuery.rows.length) {
-      console.log('in api/requestPasswordReset, there is no account with this email', req.body.email);
       return res.status(400).json({error: 'No account with this email.'});
     }
 
@@ -86,9 +79,6 @@ app.post('/api/requestPasswordReset', async (req, res) => {
 
 // for resetting pw
 app.post('/api/resetPassword', async (req, res) => {
-  console.log('inside /api/resetPassword')
-  console.log('req.body.newPw', req.body.newPw)
-  console.log('req.body.pwResetToken', req.body.pwResetToken)
   try {
     if (req.body.newPw === '') {
       return res.status(400).json({error: 'Password cannot be empty'});
@@ -101,16 +91,12 @@ app.post('/api/resetPassword', async (req, res) => {
     if (!userQuery.rows.length) {
       return res.status(400).json({error: 'Invalid token, does not match any account'});
     }
-    console.log('after query, userQuery is', userQuery);
 
     const salt = await bcrypt.genSalt(10);
     const saltedHashedPw = await bcrypt.hash(req.body.newPw, salt);
-    console.log('after saltedHashedPw')
     await pool.query('UPDATE account SET pw = $1, pw_reset_token = NULL WHERE id = $2', [saltedHashedPw, userQuery.rows[0].id]);
-    console.log('after putting new password in database')
     res.status(200).json({message: 'Password updated successfully.'});
   } catch (err) {
-    console.log('in catch')
     console.error(err);
     res.status(500).json({error: 'An error occurred while resetting the password.'});
   }
@@ -141,9 +127,6 @@ app.get('/api/jwt', checkJwt, (req, res) => {
 app.get('/api/alerts', checkJwt, async (req, res) => {
   try {
     const alertQuery = await pool.query('SELECT * FROM alert WHERE account_id = $1', [req.jwtPayload.id]);
-    if (alertQuery.rows.length === 0) {
-      console.log('no alerts set for this user');
-    }
     res.json(alertQuery.rows);
   } catch (err) {
     console.error(err.message);
