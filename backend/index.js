@@ -71,7 +71,7 @@ app.post('/api/requestPasswordReset', async (req, res) => {
       'to': req.body.email,
       'from': 'aqimebaby@aqimebaby.com',
       'subject': `Reset your AQI Me Baby password`,
-      'text':  `Visit here to reset your password: https://www.aqimebaby.com?pwResetToken=${pwResetToken}.\n\nLove,\nAQI Me Baby\n\nP.S. If you didn't request a password reset, you can ignore this email.`,
+      'text':  `Visit here to reset your password: https://www.aqimebaby.com?pwResetToken=${pwResetToken}\n\nLove,\nAQI Me Baby\n\nP.S. If you didn't request a password reset, you can ignore this email.`,
       'html': `<p>Click <a href="https://www.aqimebaby.com?pwResetToken=${pwResetToken}">here</a> to reset your password.</p><p>Love,<br>AQI Me Baby</p>
       <img src="https://i.imgur.com/Inz6kz1.png" style="max-width:70px;" alt="happy cloud" />
       <br><br><p>P.S. If you didn't request a password reset, you can ignore this email.</p>
