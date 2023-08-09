@@ -61,6 +61,10 @@ input {
     font-size: 18px;
     font-weight: 500;
 }
+.error-msg.account.pw-reset {
+    margin-top: 5px;
+    font-weight: 400;
+}
 .pw-reset-success-msg {
     color: green;
 }

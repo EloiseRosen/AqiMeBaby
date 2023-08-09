@@ -15,6 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [pwResetToken, setPwResetToken] = useState(null);
   const [pwResetSuccessMsg, setPwResetSuccessMsg] = useState('');
+  const [accountPwResetMsg, setAccountPwResetMsg] = useState('');
 
   function handleUnauthorized() { // received 401, logged out, or deleted account
     setIsLoggedIn(false);
@@ -74,8 +75,21 @@ function App() {
           <ResetPw onPwResetSuccess={handlePwResetSuccess} pwResetToken={pwResetToken}/>
           ) : (
           <>
-            {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} pwResetSuccessMsg={pwResetSuccessMsg} setPwResetSuccessMsg={setPwResetSuccessMsg} />}
-            {isLoggedIn && <Account onUnauthorized={handleUnauthorized} />}
+            {!isLoggedIn && 
+              <Login
+                setIsLoggedIn={setIsLoggedIn} 
+                pwResetSuccessMsg={pwResetSuccessMsg} 
+                setPwResetSuccessMsg={setPwResetSuccessMsg}
+                setAccountPwResetMsg={setAccountPwResetMsg}
+              />
+            }
+            {isLoggedIn && 
+              <Account 
+                onUnauthorized={handleUnauthorized} 
+                accountPwResetMsg={accountPwResetMsg} 
+                setAccountPwResetMsg={setAccountPwResetMsg} 
+              />
+            }
             {isLoggedIn && <Alerts onUnauthorized={handleUnauthorized} />}
           </>
         )}

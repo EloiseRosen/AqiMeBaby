@@ -69,6 +69,19 @@ function Account(props) {
     }
   }
 
+  async function handleForgotPwClick() {
+    try {
+      props.setAccountPwResetMsg('A password reset email has been sent.');
+      const response = await fetch(`${URL}/api/requestPasswordReset`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({'email': email}),
+      });
+    } catch (err) {
+      console.error('error:', err);
+    }
+  }
+
   return (
     <>
       <h2 className="overview-heading">Account</h2>
@@ -76,7 +89,7 @@ function Account(props) {
       <div className="account-container">
         <div className="account-inline-container">
           <p className="account-item">{email}</p>
-          <button className="account-item blue-button">
+          <button className="account-item blue-button" onClick={handleForgotPwClick}>
             Change Password
           </button>
           <button className="account-item coral-button" onClick={handleDeleteAccount}>
@@ -84,6 +97,7 @@ function Account(props) {
           </button>
         </div>
         {!emailConfirmed && <p className="error-msg account">email hasn't been confirmed so no alerts can be sent (refresh page to refresh status)</p>}
+        {props.accountPwResetMsg !== '' && <p className="error-msg account pw-reset">{props.accountPwResetMsg}</p>}
       </div>
     </>
   );

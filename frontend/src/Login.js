@@ -31,6 +31,7 @@ function Login(props) {
         console.log('Success!');
         setErrorMsg('');
         props.setPwResetSuccessMsg('');
+        props.setAccountPwResetMsg('');
 
         // for create account and login paths, response body is our JWT ({token: token})
         const responseBody = await response.json();
