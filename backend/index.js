@@ -106,7 +106,7 @@ app.post('/api/resetPassword', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const saltedHashedPw = await bcrypt.hash(req.body.newPw, salt);
     console.log('after saltedHashedPw')
-    await pool.query('UPDATE account SET password = $1, pw_reset_token = NULL WHERE id = $2', [saltedHashedPw, userQuery.rows[0].id]);
+    await pool.query('UPDATE account SET pw = $1, pw_reset_token = NULL WHERE id = $2', [saltedHashedPw, userQuery.rows[0].id]);
     console.log('after putting new password in database')
     res.status(200).json({message: 'Password updated successfully.'});
   } catch (err) {
