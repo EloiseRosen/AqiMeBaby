@@ -64,7 +64,6 @@ function Login(props) {
     }
   }
   
-
   return (
     <div className="login-container">
       <h2>{isCreatingAccount ? 'Create Account' : 'Log In'}</h2>

@@ -56,23 +56,23 @@ function checkJwt(req, res, next) {
   });
 };
 
-// for handling user click on "Forgot Password?"
+// for sending password reset email
 app.post('/api/requestPasswordReset', async (req, res) => {
   try {
     const userQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
     if (!userQuery.rows.length) {
-      console.log('in api/requestPasswordReset, there is no account with this email');
+      console.log('in api/requestPasswordReset, there is no account with this email', req.body.email);
       return res.status(400).json({error: 'No account with this email.'});
     }
 
     const pwResetToken = uuidv4(); // generate a UUID to use as password reset token
-    await pool.query('UPDATE account SET pw_reset_token = $1, pw_reset_expiration = NOW() + INTERVAL \'1 hour\' WHERE email = $2', [pwResetToken, req.body.email]);
+    await pool.query('UPDATE account SET pw_reset_token = $1 WHERE email = $2', [pwResetToken, req.body.email]);
     await sgMail.send({
       'to': req.body.email,
       'from': 'aqimebaby@aqimebaby.com',
       'subject': `Reset your AQI Me Baby password`,
-      'text':  `Visit here to reset your password: https://www.aqimebaby.com/resetPassword?token=${pwResetToken}.\n\nLove,\nAQI Me Baby`,
-      'html': `<p>Click <a href="https://www.aqimebaby.com/resetPassword?token=${pwResetToken}">here</a> to reset your password.</p><p>Love,<br>AQI Me Baby</p>
+      'text':  `Visit here to reset your password: https://www.aqimebaby.com/resetPassword?pwResetToken=${pwResetToken}.\n\nLove,\nAQI Me Baby`,
+      'html': `<p>Click <a href="https://www.aqimebaby.com/resetPassword?pwResetToken=${pwResetToken}">here</a> to reset your password.</p><p>Love,<br>AQI Me Baby</p>
       <img src="https://i.imgur.com/Inz6kz1.png" style="max-width:70px;" alt="happy cloud" />
       `
     });
@@ -83,9 +83,29 @@ app.post('/api/requestPasswordReset', async (req, res) => {
   }
 });
 
-// for handling user clicks on password reset link in email
+// for resetting pw
 app.post('/api/resetPassword', async (req, res) => {
-  console.log('hi');
+  try {
+    if (req.body.newPw === '') {
+      return res.status(400).json({error: 'Password cannot be empty'});
+    }
+    if (!req.body.pwResetToken) {
+      return res.status(400).json({error: 'Reset Password Token is missing'});
+    }
+    
+    const userQuery = await pool.query('SELECT * FROM account WHERE pw_reset_token = $1', [req.body.pwResetToken]);
+    if (!userQuery.rows.length) {
+      return res.status(400).json({error: 'Invalid token, does not match any account'});
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const saltedHashedPw = await bcrypt.hash(req.body.newPw, salt);
+    await pool.query('UPDATE account SET password = $1, pw_reset_token = NULL WHERE id = $2', [saltedHashedPw, userQuery.rows[0].id]);
+    res.status(200).json({message: 'Password updated successfully.'});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: 'An error occurred while resetting the password.'});
+  }
 });
 
 // route to confirm email: check supplied token against database, if there's a match mark the email confirmed 
