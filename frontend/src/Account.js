@@ -71,7 +71,7 @@ function Account(props) {
 
   async function handleForgotPwClick() {
     try {
-      props.setAccountPwResetMsg('A password reset email has been sent.');
+      props.setAccountPwResetMsg('A password reset email has been sent');
       const response = await fetch(`${URL}/api/requestPasswordReset`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

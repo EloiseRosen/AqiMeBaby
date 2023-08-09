@@ -62,7 +62,7 @@ input {
     font-weight: 500;
 }
 .error-msg.account.pw-reset {
-    margin-top: 5px;
+    margin-top: 10px;
     font-weight: 400;
 }
 .pw-reset-success-msg {
