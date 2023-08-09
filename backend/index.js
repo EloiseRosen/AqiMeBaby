@@ -194,20 +194,6 @@ app.get('/api/email', checkJwt, async (req, res) => {
   }
 });
 
-
-app.get('/api/external', async (req, res) => {
-  try {
-    const response = await fetch(`https://api.waqi.info/feed/geo:43.6;-79.3/?token=${process.env.AQI_API_TOKEN}`);
-    const json = await response.json();
-    res.json(json);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({error: 'An error occurred'});
-  }
-});
-
-
-
 // for logging in to an existing account
 app.post('/api/login', async (req, res) => {
   try {

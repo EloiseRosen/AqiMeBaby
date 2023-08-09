@@ -49,20 +49,6 @@ function App() {
     }
     verifyJwt();
   }, []); // Empty dependency array -> run once on component mount
-  
-
-  useEffect(() => {
-    async function testExternalAPI() {
-      try {
-        const response = await fetch(`${URL}/api/external`);
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-    testExternalAPI();
-  }, []);
 
   useEffect(() => { // if pwResetToken is in URL, update pwResetToken state so we can show the ResetPw component
     const urlParams = new URLSearchParams(window.location.search);
