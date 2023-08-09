@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
+const { v4: uuidv4 } = require('uuid');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -54,6 +55,38 @@ function checkJwt(req, res, next) {
     }
   });
 };
+
+// for handling user click on "Forgot Password?"
+app.post('/api/requestPasswordReset', async (req, res) => {
+  try {
+    const userQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
+    if (!userQuery.rows.length) {
+      console.log('in api/requestPasswordReset, there is no account with this email');
+      return res.status(400).json({error: 'No account with this email.'});
+    }
+
+    const pwResetToken = uuidv4(); // generate a UUID to use as password reset token
+    await pool.query('UPDATE account SET pw_reset_token = $1, pw_reset_expiration = NOW() + INTERVAL \'1 hour\' WHERE email = $2', [pwResetToken, req.body.email]);
+    await sgMail.send({
+      'to': req.body.email,
+      'from': 'aqimebaby@aqimebaby.com',
+      'subject': `Reset your AQI Me Baby password`,
+      'text':  `Visit here to reset your password: https://www.aqimebaby.com/resetPassword?token=${pwResetToken}.\n\nLove,\nAQI Me Baby`,
+      'html': `<p>Click <a href="https://www.aqimebaby.com/resetPassword?token=${pwResetToken}">here</a> to reset your password.</p><p>Love,<br>AQI Me Baby</p>
+      <img src="https://i.imgur.com/Inz6kz1.png" style="max-width:70px;" alt="happy cloud" />
+      `
+    });
+    res.status(200).send('Password reset email sent.');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: 'An error occurred in password reset request.'});
+  }
+});
+
+// for handling user clicks on password reset link in email
+app.post('/api/resetPassword', async (req, res) => {
+  console.log('hi');
+});
 
 // route to confirm email: check supplied token against database, if there's a match mark the email confirmed 
 app.get('/api/confirmEmail', async (req, res) => {

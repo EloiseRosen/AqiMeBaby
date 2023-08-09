@@ -51,6 +51,20 @@ function Login(props) {
     }
   }
 
+  async function handleForgotPwClick() {
+    try {
+      setErrorMsg('If an account with the typed-in email exists, a password reset email has been sent.');
+      const response = await fetch(`${URL}/api/requestPasswordReset`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({'email': email}),
+      });
+    } catch (err) {
+      console.error('error:', err);
+    }
+  }
+  
+
   return (
     <div className="login-container">
       <h2>{isCreatingAccount ? 'Create Account' : 'Log In'}</h2>
@@ -73,7 +87,7 @@ function Login(props) {
 
 
         {!isCreatingAccount &&
-        <button type="button" className="transparent-button forgot-pw"> {/* add onClick={handleForgotPwClick} */}
+        <button type="button" className="transparent-button forgot-pw" onClick={handleForgotPwClick}>
           Forgot password?
         </button>
         }
