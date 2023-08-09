@@ -52,7 +52,6 @@ input {
 .error-msg {
     color: red;
 }
-
 .error-msg.alert {
     text-align: center;
 }
@@ -61,6 +60,9 @@ input {
     margin-left: 12px;
     font-size: 18px;
     font-weight: 500;
+}
+.pw-reset-success-msg {
+    color: green;
 }
 
 

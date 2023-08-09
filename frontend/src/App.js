@@ -74,8 +74,7 @@ function App() {
           <ResetPw onPwResetSuccess={handlePwResetSuccess} pwResetToken={pwResetToken}/>
           ) : (
           <>
-            {pwResetSuccessMsg !== '' && <p>{pwResetSuccessMsg}</p>}
-            {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} />}
+            {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn} pwResetSuccessMsg={pwResetSuccessMsg} setPwResetSuccessMsg={setPwResetSuccessMsg} />}
             {isLoggedIn && <Account onUnauthorized={handleUnauthorized} />}
             {isLoggedIn && <Alerts onUnauthorized={handleUnauthorized} />}
           </>
