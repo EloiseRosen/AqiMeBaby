@@ -109,7 +109,7 @@ function Account(props) {
             Delete Account
           </button>
         </div>
-        {emailConfirmed === false && <p className="error-msg account">email hasn't been confirmed so no alerts can be sent (refresh page to refresh status)</p>}
+        {emailConfirmed === false && <p className="error-msg account">Email unconfirmed so alerts can't be sent (check spam folder if missing); refresh page to refresh status</p>}
         {props.accountPwResetMsg !== '' && <p className="error-msg account pw-reset">{props.accountPwResetMsg}</p>}
       </div>
     </>
