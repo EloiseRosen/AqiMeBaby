@@ -5,12 +5,19 @@ const pool = require('../backend/db-connection.js');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
-// Sleep for 65 milliseconds between requests. Then max # of AQI requests in a second
-// is 15.4, and max # of requests in a minute is 923.
+/**
+ * Sleep for 65 milliseconds between requests. Then max # of AQI requests in a second
+ * is 15.4, and max # of requests in a minute is 923.
+ */
 function sleep() {
   return new Promise(resolve => setTimeout(resolve, 65));
 }
 
+/**
+ * Get alerts associated with accounts where confirmed_email is true. For each alert, send out 
+ * email if the alert conditions have been met.
+ * Sleep to stay within API limits.
+ */
 async function sendEmails() {
   try {
     const alertQuery = await pool.query('SELECT alert.id, alert.location_name, alert.latitude, alert.longitude, alert.alert_level, alert.alert_active_last_check, account.email FROM alert inner join account on alert.account_id = account.id where account.confirmed_email = true');

@@ -2,6 +2,9 @@ import React from 'react';
 import cloudImage from './images/cloud.png'; 
 
 
+/**
+ * The Header component displays the title and subtitle, which vary depending on application state.
+ */
 function Header(props) {
   const headerStyle = {
     marginTop: !props.isLoggedIn ? '30px' : '20px',

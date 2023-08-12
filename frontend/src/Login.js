@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 const URL = process.env.REACT_APP_URL;
 
 
+/**
+ * The Login component provides functionality to login or create account. It
+ * allows for toggling password visibility, and displays error messages if there
+ * is an issue with login or account creation.
+ */
 function Login(props) {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -10,11 +15,19 @@ function Login(props) {
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  /**
+   * Toggle between Login and Account Creation view based on user click.
+   */
   function handleAltButtonClick() {
     setIsCreatingAccount(prev => !prev);
     setErrorMsg('');
   }
 
+  /**
+   * When user clicks Login button or Create Account button, send the entered email and 
+   * password to backend. If there's an issue, display appropriate error message. If 
+   * successful, set JWT, and set state to logged in.
+   */
   async function handleSubmit(e) {
     e.preventDefault();
     const url = isCreatingAccount ? `${URL}/api/account` : `${URL}/api/login`;
@@ -49,6 +62,10 @@ function Login(props) {
     }
   }
 
+  /**
+   * When user clicks "Forgot Password?", send a password reset email if the typed-in 
+   * email exists.
+   */
   async function handleForgotPwClick() {
     try {
       setErrorMsg('If an account with the typed-in email exists, a password reset email has been sent.');
@@ -82,7 +99,6 @@ function Login(props) {
             <i className={isPwVisible ? 'fa-solid  fa-eye' : 'fa-solid fa-eye-slash'}></i>
           </button>
         </div>
-
 
         {!isCreatingAccount &&
         <button type="button" className="transparent-button forgot-pw" onClick={handleForgotPwClick}>

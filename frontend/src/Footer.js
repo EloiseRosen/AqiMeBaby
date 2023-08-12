@@ -1,6 +1,9 @@
 import React from 'react';
 
 
+/**
+ * The Footer component displays footer icons for navigation.
+ */
 function Footer() {
   return (
     <div className="footer-icon-container">

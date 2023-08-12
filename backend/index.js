@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-//const fetch = require('node-fetch');
 const pool = require('./db-connection.js');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
@@ -10,8 +9,9 @@ const sgMail = require('@sendgrid/mail');
 const { v4: uuidv4 } = require('uuid');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-dotenv.config();
+dotenv.config(); // populate environment variables
 const PORT = process.env.PORT || 3001;
+
 
 const app = express();
 app.use((req, res, next) => { // in prod always use HTTPS
@@ -25,7 +25,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend/build'))); // serve static files from frontend
 
-
+/**
+ * Check headers for JWT. If present, verify that JWT is vaild. If it is,
+ * add the decoded payload to the req object so that we can access it in 
+ * later middleware.
+ */
 function checkJwt(req, res, next) {
   if (!req.headers || !req.headers.authorization) {
     return res.status(401).json({error: 'No token provided'});
@@ -50,7 +54,10 @@ function checkJwt(req, res, next) {
   });
 };
 
-// for sending password reset email
+/**
+ * Send password reset email.
+ * Generate a UUID to use as password reset token, then send email.
+ */
 app.post('/api/requestPasswordReset', async (req, res) => {
   try {
     const userQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
@@ -77,7 +84,11 @@ app.post('/api/requestPasswordReset', async (req, res) => {
   }
 });
 
-// for resetting pw
+/**
+ * Reset password in database.
+ * Validate that password reset token is valid and new password is valid. If so, salt and
+ * hash new password and update in database.
+ */
 app.post('/api/resetPassword', async (req, res) => {
   try {
     if (req.body.newPw === '') {
@@ -102,7 +113,11 @@ app.post('/api/resetPassword', async (req, res) => {
   }
 });
 
-// route to confirm email: check supplied token against database, if there's a match mark the email confirmed 
+/**
+ * Route to confirm email.
+ * Check supplied token against database. If it matches, mark the email confirmed.
+ * Send back error or success message accordingly.
+ */
 app.get('/api/confirmEmail', async (req, res) => {
   try {
     const query = await pool.query('SELECT * FROM account WHERE email_verification_token = $1', [req.query.token]);
@@ -117,13 +132,17 @@ app.get('/api/confirmEmail', async (req, res) => {
   }
 });
 
-// sometimes the frontend just needs to know if a JWT is valid
+/**
+ * Sometimes the frontend just needs to know if a JWT is valid.
+ */
 app.get('/api/jwt', checkJwt, (req, res) => {
   // If we get to this point, the checkJwt middleware got to next() so the JWT was valid
   res.status(200).send();
 });
 
-// for retrieving user's alerts
+/**
+ * Retrieve user's alerts.
+ */
 app.get('/api/alerts', checkJwt, async (req, res) => {
   try {
     const alertQuery = await pool.query('SELECT * FROM alert WHERE account_id = $1', [req.jwtPayload.id]);
@@ -134,7 +153,9 @@ app.get('/api/alerts', checkJwt, async (req, res) => {
   }
 });
 
-// create new alert
+/**
+ * Create a new alert.
+ */
 app.post('/api/alerts', checkJwt, async (req, res) => {
   try {
     if (req.body.location === '' || req.body.aqi === '') {
@@ -162,7 +183,9 @@ app.post('/api/alerts', checkJwt, async (req, res) => {
   }
 });
 
-// delete alert
+/**
+ * Delete alert.
+ */
 app.delete('/api/alerts/:id', checkJwt, async (req, res) => {
   try {
     await pool.query('DELETE FROM alert WHERE account_id = $1 and id = $2', [req.jwtPayload.id, req.params.id]);
@@ -173,7 +196,9 @@ app.delete('/api/alerts/:id', checkJwt, async (req, res) => {
   }
 });
 
-// for retrieving user's email
+/**
+ * Retrieve user's email address.
+ */
 app.get('/api/email', checkJwt, async (req, res) => {
   try {
     const emailQuery = await pool.query('SELECT * FROM account WHERE id = $1', [req.jwtPayload.id]);
@@ -184,7 +209,10 @@ app.get('/api/email', checkJwt, async (req, res) => {
   }
 });
 
-// for logging in to an existing account
+/**
+ * Log into an existing account.
+ * Check that email and password are valid. Then create and send back JWT.
+ */
 app.post('/api/login', async (req, res) => {
   try {
     const matchingEmailQuery = await pool.query('SELECT * FROM account WHERE email = $1', [req.body.email]);
@@ -209,7 +237,11 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// for creating a new account
+/**
+ * Create a new account.
+ * Check email and password are valid. Then salt and hash password, and enter new account into 
+ * database. Also set JWT and send email verfication request email.
+ */
 app.post('/api/account', async (req, res) => {
   try {
     if (req.body.email === '') {
@@ -254,7 +286,9 @@ app.post('/api/account', async (req, res) => {
   }
 });
 
-// for deleting an account
+/**
+ * Delete user account.
+ */
 app.delete('/api/account', checkJwt, async (req, res) => {
   try {
     await pool.query('DELETE FROM account WHERE id = $1', [req.jwtPayload.id]);

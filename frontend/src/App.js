@@ -10,19 +10,34 @@ import Footer from './Footer';
 const URL = process.env.REACT_APP_URL;
 
 
+/**
+ * The App component is the main component, which controls whether user sees
+ * login/create account, password reset, or account and alerts view. Also has
+ * state for logged in, password reset, and display messages.
+ */
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [pwResetToken, setPwResetToken] = useState(null);
   const [pwResetSuccessMsg, setPwResetSuccessMsg] = useState('');
   const [accountPwResetMsg, setAccountPwResetMsg] = useState('');
 
-  function handleUnauthorized() { // received 401, logged out, or deleted account
+  /**
+   * When we receive a 401, the user logs out, or the user deletes their 
+   * account:
+   * delete JWT, set user to logged out, and remove any previous 
+   * success message.
+   */
+  function handleUnauthorized() {
     setIsLoggedIn(false);
     localStorage.removeItem('token');
     setPwResetSuccessMsg('');
   }
 
-  //  when component mounts, check whether user is authenticated
+  /**
+   * When component mounts, check whether user is authenticated, and update state 
+   * accordingly.
+   * Empty dependency array -> run once on component mount.
+   */
   useEffect(() => {
     async function verifyJwt() {
       const token = localStorage.getItem('token');
@@ -48,9 +63,13 @@ function App() {
       }
     }
     verifyJwt();
-  }, []); // Empty dependency array -> run once on component mount
+  }, []);
 
-  useEffect(() => { // if pwResetToken is in URL, update pwResetToken state so we can show the ResetPw component
+  /**
+   * Password reset functionality.
+   * If pwResetToken is in URL, update pwResetToken state so we can show the ResetPw component.
+   */
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const pwResetTokenFromUrl = urlParams.get('pwResetToken');
     if (pwResetTokenFromUrl) {
@@ -58,6 +77,10 @@ function App() {
     }
   }, []);
   
+  /**
+   * When password reset is successful, remove password reset token, set password reset success message, and
+   * have user log back in.
+   */
   function handlePwResetSuccess() {
     window.history.replaceState({}, document.title, window.location.pathname); // replace current URL with the same URL except pwResetToken removed
     setPwResetToken(null);

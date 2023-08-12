@@ -3,10 +3,19 @@ import React, { useState, useEffect } from 'react';
 const URL = process.env.REACT_APP_URL;
 
 
+/**
+ * The Account component displays account information and provides 
+ * functionality for account management actions (change password,
+ * delete account).
+ */
 function Account(props) {
   const [email, setEmail] = useState('');
   const [emailConfirmed, setEmailConfirmed] = useState(false);
 
+  /**
+   * Fetch the email address associated with this account.
+   * Set warning message state based on whether user has verified email address or not.
+   */
   async function fetchEmail() {
     try {
       const response = await fetch(`${URL}/api/email`,
@@ -36,6 +45,10 @@ function Account(props) {
     fetchEmail();
   }, []);
 
+  /**
+   * When user clicks "Delete Account" button, confirm with user, then delete account
+   * from database, remove JWT, and set state to logged out.
+   */
   async function handleDeleteAccount() {
     const deleteConfirmed = window.confirm('Are you sure you want to delete your account?');
     if (!deleteConfirmed) { // user pressed cancel
@@ -65,6 +78,10 @@ function Account(props) {
     }
   }
 
+  /**
+   * When user clicks on the "Change Password" button, send a password reset email to their
+   * email address.
+   */
   async function handleForgotPwClick() {
     try {
       props.setAccountPwResetMsg('A password reset email has been sent');

@@ -4,6 +4,10 @@ import InfoBox from './InfoBox';
 const URL = process.env.REACT_APP_URL;
 
 
+/**
+ * The Alerts component displays alert information and provides functionality
+ * for alert management actions (create new alert, delete alert).
+ */
 function Alerts(props) {
   const [alerts, setAlerts] = useState([]);
   const [locationInput, setLocationInput] = useState('');
@@ -14,11 +18,16 @@ function Alerts(props) {
   const [autocompletedPlaceSelected, setAutocompletedPlaceSelected] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const locationInputRef = useRef(null); // refers to location input field (see ref={locationInputRef} below)
-  // locationInputRef.current then points to the actual DOM element of the input field once it is rendered.
-  // This is then used in new window.google.maps.places.Autocomplete(locationInputRef.current) to initialize
-  // the Google Places API autocomplete feature.
-  // useRef avoids unnecessary re-renders of component
+  /**
+   * Location autocomplete functionality.
+   * 
+   * locationInputRef refers to location input field (see ref={locationInputRef} below).
+   * locationInputRef.current then points to the actual DOM element of the input field once it is rendered.
+   * This is then used in new window.google.maps.places.Autocomplete(locationInputRef.current) to initialize
+   * the Google Places API autocomplete feature.
+   * useRef avoids unnecessary re-renders of component.
+   */
+  const locationInputRef = useRef(null);
   useEffect(() => {
     window.initAutocomplete = () => {
       const autocomplete = new window.google.maps.places.Autocomplete(locationInputRef.current);
@@ -43,6 +52,9 @@ function Alerts(props) {
     document.body.appendChild(script);
   }, []);
 
+  /**
+   * Fetch the alerts associated with this account.
+   */
   async function fetchAlerts() {
     try {
       const response = await fetch(`${URL}/api/alerts`,
@@ -71,6 +83,11 @@ function Alerts(props) {
     fetchAlerts();
   }, []);
 
+  /**
+   * When user enters new alert info and clicks to create the new alert, check that input is valid.
+   * If it is, send POST request to backend to create the new alert. Then refresh the alerts view to
+   * display the updated list of alerts.
+   */
   async function handleCreateAlert() {
     if (!autocompletedPlaceSelected) {
       setErrorMsg('Please select a location from dropdown');
@@ -103,6 +120,10 @@ function Alerts(props) {
     }
   }
 
+  /**
+   * When user clicks to delete an alert, send the DELETE HTTP request. 
+   * Refresh the alerts view to display the updated list of alerts.
+   */
   async function handleDeleteAlert(id) {
     try {
       const response = await fetch(`${URL}/api/alerts/${id}`, {

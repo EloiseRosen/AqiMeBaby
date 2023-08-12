@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import aqiChart from './images/aqi-chart.png';
 
 
+/**
+ * The InfoBox component displays information on what AQI levels correspond to what
+ * risk levels.
+ */
 function InfoBox() {
   const [infoIsOpen, setInfoIsOpen] = useState(false);
 

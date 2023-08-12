@@ -3,11 +3,21 @@ import React, { useState } from 'react';
 const URL = process.env.REACT_APP_URL;
 
 
+/**
+ * The ResetPw component provides functionality for resetting password.
+ * Password visibility can be toggled, and an error message is shown as
+ * applicable.
+ */
 function ResetPw(props) {
   const [pw, setPw] = useState('');
   const [isPwVisible, setIsPwVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  /**
+   * When user submits their new password, a POST request is sent to
+   * backend. If password has been successfully changed, success message is
+   * shown and we go back to login view. On error, error message is shown.
+   */
   async function handleSubmit(e) {
     e.preventDefault();
     try {
